@@ -3,6 +3,7 @@ from coregraphene.components.controllers import (
     AccurateVakumetrController,
     ValveController,
     CurrentSourceController,
+    RrgModbusController,
 )
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
@@ -14,9 +15,11 @@ class CvdSystem(BaseSystem):
 
     def _init_controllers(self):
         self.accurate_vakumetr_controller = AccurateVakumetrController()
-        self._valves = {}
+        self._valves = dict()
+        self._rrgs = dict()
         for valve_conf in VALVES_CONFIGURATION:
             self._valves[valve_conf["NAME"]] = ValveController(port=valve_conf["PORT"])
+            # self._rrgs[valve_conf["NAME"]] = RrgModbusController(...)
 
         self.current_source_controller = CurrentSourceController(
             on_change_current=self.on_change_current,

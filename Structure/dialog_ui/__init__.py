@@ -13,19 +13,17 @@ from Structure.dialog_ui.RightButtonsWidget import RightButtonsWidget
 from Structure.dialog_ui.TableWidget import AppTableWidget
 from Structure.dialog_ui.components import LogWidget
 from Structure.system import CvdSystem
+
 from coregraphene.constants import RECIPE_STATES
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
         self.setWindowTitle("CVD-Graphene")
 
         ##############################################################################
-        ##############################################################################
-        ##############################################################################
-        ##############################################################################
-        ##############################################################################
+        # ======================= SYSTEM SETUP + RECIPES =========================== #
 
         self.system = CvdSystem()
         self.system.setup()
@@ -34,6 +32,8 @@ class MainWindow(QMainWindow):
         self._recipe_history = []
         self._current_recipe_step = None
         self._recipe_state = RECIPE_STATES.STOP
+
+        ##############################################################################
 
         self.main_window = QHBoxLayout()
         self.main_widget = QWidget()
@@ -44,9 +44,7 @@ class MainWindow(QMainWindow):
         )
         self.main_widget.setLayout(self.main_window)
 
-        self.main_interface_layout_widget = MainBlockWidget(
-
-        )
+        self.main_interface_layout_widget = MainBlockWidget()
         self.main_window.addWidget(self.main_interface_layout_widget)
 
         self.right_buttons_layout_widget = RightButtonsWidget(
@@ -57,7 +55,6 @@ class MainWindow(QMainWindow):
         self.main_window.addWidget(self.right_buttons_layout_widget)
 
         # Устанавливаем центральный виджет Window.
-        # self.setCentralWidget(container)
         self.setCentralWidget(self.main_widget)
 
         self.timer = QtCore.QTimer(self)
@@ -80,8 +77,9 @@ class MainWindow(QMainWindow):
         # self.threadpool = QThreadPool()
         # print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
         # self.close()
-        ############################################
-        # CONNECT FUNCTIONS ########################
+
+        #######################################################################
+        # ======================= CONNECT FUNCTIONS ========================= #
 
         # self.main_interface_layout_widget.pressure_block.o2.connect_valve_function(
         #     self.system.change_valve_state
@@ -120,10 +118,6 @@ class MainWindow(QMainWindow):
         # print("Window del")
         self.system.destructor()
 
-    def click_press(self):
-        self.counter += 1
-        self.label.setText(f"PRESSED: {self.counter}")
-
     def show_time(self):
         print("TIME:", datetime.datetime.now())
 
@@ -153,6 +147,17 @@ class MainWindow(QMainWindow):
         except:
             pass
 
+    def _update_ui_values(self):
+        self.main_interface_layout_widget.pressure_control_block.show_pressure_block.set_value(
+            self.system.accurate_vakumetr_value
+        )
+        self.main_interface_layout_widget.temperature_block.current_settings.set_voltage_value(
+            self.system.voltage_value
+        )
+        self.main_interface_layout_widget.temperature_block.current_settings.set_current_value(
+            self.system.current_value
+        )
+
     def get_values_and_log_state(self):
         try:
 
@@ -167,24 +172,12 @@ class MainWindow(QMainWindow):
                     self.main_interface_layout_widget.activate_interface()
                     self.right_buttons_layout_widget.deactivate_manage_recipe_buttons()
 
+            self._update_ui_values()
 
-            self.main_interface_layout_widget.pressure_control_block.show_pressure_block.set_value(
-                self.system.accurate_vakumetr_value
-            )
-
-            # print("VOLTAGE:", self.system.voltage_value)
-            # VOLTAGE
-            self.main_interface_layout_widget.temperature_block.current_settings.set_voltage_value(
-                self.system.voltage_value
-            )
-            self.main_interface_layout_widget.temperature_block.current_settings.set_current_value(
-                self.system.current_value
-            )
         except Exception as e:
-            self.system._add_error_log(Exception("Ошибка считывания значения: " + str(e)))
-            # self.errors.append()
+            self.system.add_error(Exception("Ошибка считывания значения: " + str(e)))
             # self.close()
-            print("ERROR", e)
+            print("ERROR [get_values_and_log_state]:", e)
         finally:
             try:
             # print("FINALLY:", self.log, "| has logs:",  self.system.has_logs)

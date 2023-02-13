@@ -1,15 +1,14 @@
 import math
 from random import randint
 
+from coregraphene.conf import settings
+
 from PyQt5 import QtCore
-from PyQt5.QtCore import QPointF
-from PyQt5.QtGui import QPainter, QPainterPath, QColor
 from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, QVBoxLayout, QLineEdit
 
 from .GasStateWidget import GasStateWidget, AirStateWidget
 from .ValveControlWidget import ValveControlWidget
 from .styles import styles
-from ...components.butterfly_button import ButterflyButton
 
 
 class PressureBlock(QWidget):
@@ -21,7 +20,7 @@ class PressureBlock(QWidget):
         self.layout.setContentsMargins(14, 14, 2, 14)
         self.setObjectName("pressure_block")
         self.setStyleSheet(styles.container)
-        self.setContentsMargins(0,0,0,0)
+        self.setContentsMargins(0, 0, 0, 0)
         self.setAttribute(QtCore.Qt.WA_StyledBackground, True)
 
         # self.line = QLineEdit()
@@ -33,26 +32,37 @@ class PressureBlock(QWidget):
         self.air = AirStateWidget()
         self.layout.addWidget(self.air)
 
-        self.o2 = GasStateWidget(gas="O_2")
-        self.layout.addWidget(self.o2,)
+        self.gases = []
 
-        self.n2 = GasStateWidget(gas="N_2")
-        self.layout.addWidget(self.n2,)
+        for valve_config in settings.VALVES_CONFIGURATION:
+            gas = valve_config['NAME']
+            gas_widget = GasStateWidget(gas=gas)
+            setattr(self, gas, gas_widget)
 
-        self.ar = GasStateWidget(gas="Ar")
-        self.layout.addWidget(self.ar,)
+            gas_attr = getattr(self, gas)
+            self.layout.addWidget(gas_attr)
+            self.gases.append(gas_attr)
 
-        self.c2 = GasStateWidget(gas="C_2")
-        self.layout.addWidget(self.c2,)
-
-        self.f2 = GasStateWidget(gas="F_2")
-        self.layout.addWidget(self.f2,)
+        # self.o2 = GasStateWidget(gas="O_2")
+        # self.layout.addWidget(self.o2,)
+        #
+        # self.n2 = GasStateWidget(gas="N_2")
+        # self.layout.addWidget(self.n2,)
+        #
+        # self.ar = GasStateWidget(gas="Ar")
+        # self.layout.addWidget(self.ar,)
+        #
+        # self.c2 = GasStateWidget(gas="C_2")
+        # self.layout.addWidget(self.c2,)
+        #
+        # self.f2 = GasStateWidget(gas="F_2")
+        # self.layout.addWidget(self.f2,)
 
         # need to connect functions in system
-        self.gases = [
-            self.o2,
-            self.n2,
-            self.ar,
-            self.c2,
-            self.f2,
-        ]
+        # self.gases = [
+        #     self.o2,
+        #     self.n2,
+        #     self.ar,
+        #     self.c2,
+        #     self.f2,
+        # ]

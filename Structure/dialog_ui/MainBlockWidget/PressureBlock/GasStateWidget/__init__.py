@@ -83,7 +83,6 @@ class GasStateWidget(QWidget):
         self.b.clicked.connect(on_click)
 
 
-
 class AirStateWidget(QWidget):
     def __init__(self):
         super().__init__()
