@@ -68,6 +68,9 @@ class GasStateWidget(QWidget):
         self.layout.addWidget(self.info_layout_widget, stretch=1, alignment=QtCore.Qt.AlignCenter,)
         self.layout.addWidget(self.b, stretch=10, alignment=QtCore.Qt.AlignHCenter,)
 
+    def update_down_label(self, value):
+        self.down_label.setText(f"{round(value)} sccm")
+
     def connect_valve_function(self, func):
         # self.valve_change_func = lambda : func(self.gas_name)
         # self.b.clicked.connect(self.valve_change_func)

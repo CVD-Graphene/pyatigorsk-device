@@ -87,8 +87,8 @@ class MainWindow(QMainWindow):
         for gas in self.main_interface_layout_widget.pressure_block.gases:
             gas.connect_valve_function(self.system.change_valve_state)
 
-        self.main_interface_layout_widget.temperature_block.current_settings.set_current_block.\
-            set_value_function = self.system.set_current
+        # self.main_interface_layout_widget.temperature_block.current_settings.set_current_block.\
+        #     set_value_function = self.system.set_current
         # self.system.change_valve_state("")
 
     def on_create_recipe(self):
@@ -151,12 +151,8 @@ class MainWindow(QMainWindow):
         self.main_interface_layout_widget.pressure_control_block.show_pressure_block.set_value(
             self.system.accurate_vakumetr_value
         )
-        self.main_interface_layout_widget.temperature_block.current_settings.set_voltage_value(
-            self.system.voltage_value
-        )
-        self.main_interface_layout_widget.temperature_block.current_settings.set_current_value(
-            self.system.current_value
-        )
+        for gas in self.main_interface_layout_widget.pressure_block.gases:
+            gas.update_down_label(self.system.current_sccm[gas.gas_name])
 
     def get_values_and_log_state(self):
         try:

@@ -19,5 +19,5 @@ class TemperatureBlock(QWidget):
         self.set_temperature = SetTemperatureBlock()
         self.layout.addWidget(self.set_temperature, QtCore.Qt.AlignTop)
 
-        self.current_settings = CurrentSettingsBlock()
-        self.layout.addWidget(self.current_settings)
+        # self.current_settings = CurrentSettingsBlock()
+        # self.layout.addWidget(self.current_settings)

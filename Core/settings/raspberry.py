@@ -31,6 +31,12 @@ VALVES_CONFIGURATION = [
     # {'PORT': 13, "NAME": "AIR", "IS_GAS": False},
 ]
 
+TERMODAT_CONFIGURATION = [
+    {'INSTRUMENT_NUMBER': 1, 'LABEL': '-'},
+    {'INSTRUMENT_NUMBER': 2, 'LABEL': '-'},
+    {'INSTRUMENT_NUMBER': 3, 'LABEL': '-'},
+]
+
 VALVE_LIST = list(map(lambda x: x.get('NAME'), VALVES_CONFIGURATION))
 GAS_LIST = list(map(lambda x: x.get('NAME'), filter(lambda x: x.get("IS_GAS", False), VALVES_CONFIGURATION)))
 
