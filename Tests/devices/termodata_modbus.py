@@ -20,7 +20,7 @@ OFF = 0
 TARGET_POINT = 0.0  # TARGET DEGREE
 
 rrg.write_register(REG_ON_OFF, 0.0, 2)  # ON/OFF
-print("on/off: " + str(rrg.read_register(reg1, 2)))
+print("on/off: " + str(rrg.read_register(REG_ON_OFF, 2)))
 rrg.write_register(371, 1.0, 1)  # 50.5 degree  # /= 10 from real (want 100C - need 10.0)
 
 READ_TARGET_1 = 369  # 171h *= 10 (10.0 is 100C)
