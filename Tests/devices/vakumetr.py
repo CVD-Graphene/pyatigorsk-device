@@ -89,11 +89,23 @@ def test_3():
     serialInst.open()
 
 
+def test_check_sum():
+    command = "0010MV00"
+    summ = 0
+    for c in command:
+        summ += ord(c)
+        # print(ord(c))
+
+    summ = (summ % 64) + 64
+    print(chr(summ))
+
+
 if __name__ == "__main__":
     print("TEST 1 ===>")
     # try:
     # test_3()
-    test_2()
+    test_check_sum()
+    # test_2()
     # test_1()
     print("TEST 1 ===> PASSED")
     # except Exception as e:

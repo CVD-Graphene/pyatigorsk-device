@@ -37,6 +37,7 @@ class CvdSystem(BaseSystem):
                     used_ports.append(port)
                     break
 
+        print("GET PORTS:", self.vakumetr_port, self.rrg_port, self.termodat_port)
         assert self.vakumetr_port is not None
         assert self.rrg_port is not None
         assert self.termodat_port is not None
