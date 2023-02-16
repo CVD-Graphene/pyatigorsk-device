@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsDropShadowEffect, \
 from Structure.dialog_ui.constants import SHADOW_BLUR_RADIUS
 from .styles import styles
 
+from coregraphene.conf import settings
+
 
 class SetTemperatureBlock(QWidget):
     def __init__(self, parent=None):
@@ -27,7 +29,7 @@ class SetTemperatureBlock(QWidget):
         self.title.setAlignment(QtCore.Qt.AlignCenter)
 
         self.temps = dict()
-        for num in [1, 2, 3]:
+        for num, _ in enumerate(settings.TERMODAT_CONFIGURATION):
             t_obj = QLabel()
             t_obj.setText(f"Temp {num}:")
             t_obj.setStyleSheet(styles.title)
