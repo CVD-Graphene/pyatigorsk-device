@@ -26,9 +26,10 @@ class CvdSystem(BaseSystem):
             ['termodat_port', TermodatModbusController],
             ['vakumetr_port', AccurateVakumetrController],
         ]
-        print("PORTS USB:", get_available_usb_ports())
+        usb_ports = get_available_usb_ports()
+        print("PORTS USB:", usb_ports)
         for port_name, controller_class in attributes:
-            for port in ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']:
+            for port in usb_ports:  # ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']:
                 if port in used_ports:
                     continue
                 controller: AbstractController = controller_class(port=port)
@@ -39,7 +40,7 @@ class CvdSystem(BaseSystem):
                     used_ports.append(port)
                     break
 
-        print("GET PORTS:", self.vakumetr_port, self.rrg_port, self.termodat_port)
+        print("|> FOUND PORTS:", self.vakumetr_port, self.rrg_port, self.termodat_port)
         assert self.vakumetr_port is not None
         assert self.rrg_port is not None
         assert self.termodat_port is not None
