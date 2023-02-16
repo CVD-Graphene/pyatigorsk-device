@@ -8,6 +8,7 @@ from coregraphene.components.controllers import (
 )
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
+from coregraphene.utils import get_available_usb_ports
 
 VALVES_CONFIGURATION = settings.VALVES_CONFIGURATION
 TERMODAT_CONFIGURATION = settings.TERMODAT_CONFIGURATION
@@ -21,10 +22,11 @@ class CvdSystem(BaseSystem):
         self.rrg_port = None
         self.termodat_port = None
         attributes = [
-            ['vakumetr_port', AccurateVakumetrController],
             ['rrg_port', RrgModbusController],
             ['termodat_port', TermodatModbusController],
+            ['vakumetr_port', AccurateVakumetrController],
         ]
+        print("PORTS USB:", get_available_usb_ports())
         for port_name, controller_class in attributes:
             for port in ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']:
                 if port in used_ports:
