@@ -132,4 +132,7 @@ class CvdSystem(BaseSystem):
         self.accurate_vakumetr_value = self.accurate_vakumetr_controller.vakumetr_value
         for key in self.current_sccm.keys():
             self.current_sccm[key] = self._rrgs[key].get_current_sccm()
+
+        for key in self.current_temperatures.keys():
+            self.current_temperatures[key] = self._termodats[key].current_temperature
         # print("VOLT VAL:", self.voltage_value)

@@ -154,6 +154,11 @@ class MainWindow(QMainWindow):
         for gas in self.main_interface_layout_widget.pressure_block.gases:
             gas.update_down_label(self.system.current_sccm[gas.gas_name])
 
+        for num, temperature in self.system.current_temperatures.items():
+            self.main_interface_layout_widget.temperature_block.set_temperature.set_temperature(
+                num, temperature
+            )
+
     def get_values_and_log_state(self):
         try:
 

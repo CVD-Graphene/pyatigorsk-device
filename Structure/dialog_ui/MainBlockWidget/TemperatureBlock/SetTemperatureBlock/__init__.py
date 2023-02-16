@@ -24,6 +24,14 @@ class SetTemperatureBlock(QWidget):
         self.title.setStyleSheet(styles.title)
         self.title.setAlignment(QtCore.Qt.AlignCenter)
 
+        self.temps = dict()
+        for num in [1, 2, 3]:
+            t_obj = QLabel()
+            t_obj.setText(f"Temp {num}:")
+            t_obj.setStyleSheet(styles.title)
+            t_obj.setAlignment(QtCore.Qt.AlignCenter)
+            self.temps[num] = t_obj
+
         self.bottom_layout = QHBoxLayout()
 
         self.label_1 = QLabel()
@@ -65,4 +73,9 @@ class SetTemperatureBlock(QWidget):
         # self.bottom_layout.setAlignment(QtCore.Qt.AlignLeft)
 
         self.layout.addWidget(self.title, QtCore.Qt.AlignHCenter)
+        for k, v in self.temps.items():
+            self.layout.addWidget(v, QtCore.Qt.AlignHCenter)
         self.layout.addLayout(self.bottom_layout, QtCore.Qt.AlignLeft)
+
+    def set_temperature(self, num, value):
+        self.temps[num].setText(f"Temp {num}: {value}")
