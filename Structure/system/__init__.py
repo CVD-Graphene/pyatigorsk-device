@@ -46,6 +46,7 @@ class CvdSystem(BaseSystem):
                     used_ports.append(port)
                     break
 
+                controller.destructor()
                 del controller
 
         print("|> FOUND PORTS:", self.vakumetr_port, self.rrg_port, self.termodat_port)
