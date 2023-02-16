@@ -10,8 +10,8 @@ LABEL_WIDTH = "500px"
 
 styles = StyleSheet({
     "container": {
-        "max-height": "120px",
-        "min-height": "120px",
+        "max-height": "150px",
+        "min-height": "150px",
         "min-width": WIDTH,
         "width": WIDTH,
 
