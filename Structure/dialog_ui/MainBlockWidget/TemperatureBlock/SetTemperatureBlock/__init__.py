@@ -1,3 +1,5 @@
+import random
+
 from PyQt5 import QtCore
 from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsDropShadowEffect, \
@@ -78,4 +80,4 @@ class SetTemperatureBlock(QWidget):
         self.layout.addLayout(self.bottom_layout, QtCore.Qt.AlignLeft)
 
     def set_temperature(self, num, value):
-        self.temps[num].setText(f"Temp {num}: {value}")
+        self.temps[num].setText(f"Temp {num}/{round(random.random() * 10)}: {value}")
