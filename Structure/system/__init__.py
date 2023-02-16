@@ -1,3 +1,5 @@
+import time
+
 from coregraphene.components.controllers import (
     AbstractController,
     AccurateVakumetrController,
@@ -44,6 +46,8 @@ class CvdSystem(BaseSystem):
         assert self.vakumetr_port is not None
         assert self.rrg_port is not None
         assert self.termodat_port is not None
+
+        time.sleep(1.0)
 
     def _init_controllers(self):
         self.accurate_vakumetr_controller = AccurateVakumetrController(
