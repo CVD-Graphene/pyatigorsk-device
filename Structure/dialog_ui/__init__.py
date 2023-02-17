@@ -86,6 +86,7 @@ class MainWindow(QMainWindow):
         # )
         for gas in self.main_interface_layout_widget.pressure_block.gases:
             gas.connect_valve_function(self.system.change_valve_state)
+            gas.connect_change_sccm_function(self.system.set_rrg_target_sccm)
 
         # self.main_interface_layout_widget.temperature_block.current_settings.set_current_block.\
         #     set_value_function = self.system.set_current

@@ -14,6 +14,7 @@ class GasStateWidget(QWidget):
 
         self.gas_name = gas
         self.number = number
+        self._on_system_change_sccm = None
 
         self.line = QWidget(self)
         self.line.setStyleSheet(styles.line)
@@ -85,6 +86,9 @@ class GasStateWidget(QWidget):
     def update_down_label(self, value):
         self.down_label.setText(f"{round(value)} sccm")
 
+    def connect_change_sccm_function(self, func):
+        self._on_system_change_sccm = func
+
     def connect_valve_function(self, func):
         # self.valve_change_func = lambda : func(self.gas_name)
         # self.b.clicked.connect(self.valve_change_func)
@@ -101,7 +105,9 @@ class GasStateWidget(QWidget):
 
     def on_update_input_sccm(self):
         input_sccm = self.input.text()
-        print("INPUT SCCM:", input_sccm)
+        if self._on_system_change_sccm is not None:
+            print("INPUT SCCM:", input_sccm)
+            self._on_system_change_sccm(input_sccm, self.number)
 
 
 class AirStateWidget(QWidget):
