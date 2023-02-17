@@ -50,6 +50,7 @@ class GasStateWidget(QWidget):
         # self.input.setMinimumWidth(1000)
         self.input.setValidator(QDoubleValidator(0.0, 200.0, 1))
         self.input.setText("0")
+        self.input.returnPressed.connect(self.on_update_input_sccm)
 
         self.up_label = QLabel()
         self.up_label.setText(f"sccm")
@@ -57,7 +58,6 @@ class GasStateWidget(QWidget):
         self.up_label.setAlignment(QtCore.Qt.AlignCenter)
 
         self.up_widget = QHBoxLayout()
-        self.up_widget
         self.up_widget.addWidget(self.input, stretch=1, alignment=QtCore.Qt.AlignLeft)
         self.up_widget.addWidget(self.up_label, stretch=1, alignment=QtCore.Qt.AlignRight)
 
@@ -98,6 +98,10 @@ class GasStateWidget(QWidget):
                 self.b.paintEvent(event=None)
 
         self.b.clicked.connect(on_click)
+
+    def on_update_input_sccm(self):
+        input_sccm = self.input.text()
+        print("INPUT SCCM:", input_sccm)
 
 
 class AirStateWidget(QWidget):

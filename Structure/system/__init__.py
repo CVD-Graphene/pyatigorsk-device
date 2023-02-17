@@ -128,6 +128,11 @@ class CvdSystem(BaseSystem):
         print(f"Valve {gas_num} new state: {new_state}")
         return new_state
 
+    @BaseSystem.action
+    def set_rrg_target_sccm(self, sccm, device_num):
+        new_sccm = self.rrgs_controller.set_target_sccm(sccm, device_num)
+        return new_sccm
+
     # @BaseSystem.action
     # def set_current(self, value):
     #     return self.current_source_controller.set_current_value(value)
