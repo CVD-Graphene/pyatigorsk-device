@@ -1,4 +1,5 @@
 from PyQt5 import QtCore
+from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, \
     QVBoxLayout, QLineEdit, QHBoxLayout, QLabel
 
@@ -44,13 +45,24 @@ class GasStateWidget(QWidget):
 
         self.b = ButterflyButton()
 
+        self.input = QLineEdit()
+        self.input.setStyleSheet(styles.input)
+        # self.input.setMinimumWidth(1000)
+        self.input.setValidator(QDoubleValidator(0.0, 200.0, 1))
+        self.input.setText("0")
+
         self.up_label = QLabel()
-        self.up_label.setText(f"0.0 sccm")
+        self.up_label.setText(f"sccm")
         self.up_label.setStyleSheet(styles.up_label)
         self.up_label.setAlignment(QtCore.Qt.AlignCenter)
 
+        self.up_widget = QHBoxLayout()
+        self.up_widget
+        self.up_widget.addWidget(self.input, stretch=1, alignment=QtCore.Qt.AlignLeft)
+        self.up_widget.addWidget(self.up_label, stretch=1, alignment=QtCore.Qt.AlignRight)
+
         self.down_label = QLabel()
-        self.down_label.setText(f"0.0 sccm")
+        self.down_label.setText(f"0 sccm")
         self.down_label.setStyleSheet(styles.down_label)
         self.down_label.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -58,8 +70,9 @@ class GasStateWidget(QWidget):
         # self.info_layout_widget.setStyleSheet("background-color: #000000;max-height: 200px;")
         self.info_layout = QVBoxLayout()
         self.info_layout_widget.setLayout(self.info_layout)
-        self.info_layout.addWidget(self.up_label, QtCore.Qt.AlignTop)
-        self.info_layout.addWidget(self.down_label, QtCore.Qt.AlignTop)
+        self.info_layout.addLayout(self.up_widget)
+        # self.info_layout.addWidget(self.up_widget, alignment=QtCore.Qt.AlignTop)
+        self.info_layout.addWidget(self.down_label, alignment=QtCore.Qt.AlignTop)
 
         self.info_layout.setSpacing(0)
         # self.layout.setSpacing(0)

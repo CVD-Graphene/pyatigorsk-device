@@ -24,9 +24,12 @@ styles = StyleSheet({
     },
     "up_label": {
         "max-height": "60px",
-        "min-width": "180px",
+        "width": '100%',
+        # "margin-left": "10px",
+        # "min-width": "180px",
         # "width": "120px",
-        "background-color": "rgb(255, 255, 255)",
+        "background-color": "rgba(255, 255, 0, 0)",
+        # "background-color": "rgb(255, 255, 255)",
         "font-size": "28px",
     },
     "down_label": {
@@ -44,5 +47,17 @@ styles = StyleSheet({
         # "position": "absolute",
         # "left": "0",
         # "right": "0",
+    },
+    "input": {
+        "font-size": "28px",
+        # "height:": "100%",
+        "max-height": "60px",
+        # "min-width": "50px",
+        "background-color": "rgba(210, 210, 210, 0)",
+        # "border-color": "rgba(210, 210, 210, 0)",
+        "border": "none",
+        # "background-color": LIGHT_GREEN,
+        # "width": "90%",
+        # "max-width": "100px",
     }
 })
