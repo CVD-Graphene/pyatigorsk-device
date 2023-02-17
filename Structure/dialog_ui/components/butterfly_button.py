@@ -42,12 +42,13 @@ class ButterflyButton(QPushButton):
         # self.clicked.connect(self.on_click)
         self.setContentsMargins(0,0,0,0)
         self.setAttribute(QtCore.Qt.WA_StyledBackground, True)
+        # self.paintEvent()
 
     def on_click(self):
         self._active = not self._active
         self.paintEvent(event=None)
 
-    def paintEvent(self, event):
+    def paintEvent(self, event=None):
         try:
             qp = QPainter()
             qp.begin(self)

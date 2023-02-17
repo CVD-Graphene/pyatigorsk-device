@@ -117,14 +117,16 @@ class CvdSystem(BaseSystem):
         #     value = controller.get_value()
 
     @BaseSystem.action
-    def change_valve_state(self, gas):
+    def change_valve_state(self, gas_num):
         # t = Thread(target=self.long_function)
         # t.start()
         # return 1
-        valve = self._valves.get(gas, None)
+        valve = self._valves.get(gas_num, None)
         if valve is None:
             return False
-        return valve.change_state()
+        new_state = valve.change_state()
+        print(f"Valve {gas_num} new state: {new_state}")
+        return new_state
 
     # @BaseSystem.action
     # def set_current(self, value):

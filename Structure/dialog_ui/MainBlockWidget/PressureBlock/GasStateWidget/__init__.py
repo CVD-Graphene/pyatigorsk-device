@@ -8,10 +8,11 @@ from .styles import styles
 
 
 class GasStateWidget(QWidget):
-    def __init__(self, gas="O2"):
+    def __init__(self, gas="O2", number=None):
         super().__init__()
 
         self.gas_name = gas
+        self.number = number
 
         self.line = QWidget(self)
         self.line.setStyleSheet(styles.line)
@@ -77,7 +78,7 @@ class GasStateWidget(QWidget):
         # self.b.on_click = lambda x: x
 
         def on_click():
-            ans = func(self.gas_name)
+            ans = func(self.number)
             # print("GET ANS VALVE PRESS", ans)
             if type(ans) in [bool, int]:
                 self.b._active = not ans
