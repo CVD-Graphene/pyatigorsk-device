@@ -1,5 +1,4 @@
 import gc
-import time
 
 from coregraphene.components.controllers import (
     AbstractController,
@@ -8,6 +7,7 @@ from coregraphene.components.controllers import (
     RrgModbusController,
     TermodatModbusController,
     SeveralTermodatModbusController,
+    SeveralRrgModbusController,
 )
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
@@ -61,13 +61,14 @@ class CvdSystem(BaseSystem):
             port=self.vakumetr_port,
         )
         self._valves = dict()
-        self._rrgs = dict()
-        for valve_conf in VALVES_CONFIGURATION:
-            self._valves[valve_conf["NAME"]] = ValveController(port=valve_conf["PORT"])
-            self._rrgs[valve_conf["NAME"]] = RrgModbusController(
-                port=self.rrg_port,
-                instrument_number=valve_conf['INSTRUMENT_NUMBER'],
-            )
+        # self._rrgs = dict()
+        for i, valve_conf in enumerate(VALVES_CONFIGURATION):
+            # valve_conf["NAME"]
+            self._valves[i] = ValveController(port=valve_conf["PORT"])
+        self.rrgs_controller = SeveralRrgModbusController(
+            config=VALVES_CONFIGURATION,
+            port=self.rrg_port,
+        )
 
         # for termodat_config in TERMODAT_CONFIGURATION:
         #     num = termodat_config['INSTRUMENT_NUMBER']
@@ -82,22 +83,27 @@ class CvdSystem(BaseSystem):
 
         self._controllers: list[AbstractController] = [
             self.accurate_vakumetr_controller,
+            self.rrgs_controller,
             self.termodats_controller,
         ]
 
         for valve in self._valves.values():
             self._controllers.append(valve)
 
-        for rrg in self._rrgs.values():
-            self._controllers.append(rrg)
+        # for rrg in self._rrgs.values():
+        #     self._controllers.append(rrg)
 
         # for termodat in self._termodats.values():
         #     self._controllers.append(termodat)
 
     def _init_values(self):
         self.accurate_vakumetr_value = 0.0
-        self.current_sccm = {valve_conf["NAME"]: 0.0 for valve_conf in VALVES_CONFIGURATION}
-        self.target_sccm = {valve_conf["NAME"]: 0.0 for valve_conf in VALVES_CONFIGURATION}
+        self.current_sccms = {
+            i: 0.0 for i in range(len(VALVES_CONFIGURATION))
+        }
+        self.target_sccms = {
+            i: 0.0 for i in range(len(VALVES_CONFIGURATION))
+        }
         self.current_temperatures = {
             i: 0.0 for i in range(len(TERMODAT_CONFIGURATION))
         }
@@ -120,20 +126,14 @@ class CvdSystem(BaseSystem):
             return False
         return valve.change_state()
 
-    def on_change_current(self, value):
-        self.current_value = value
-
-    def on_change_voltage(self, value):
-        self.voltage_value = value
-
     # @BaseSystem.action
     # def set_current(self, value):
     #     return self.current_source_controller.set_current_value(value)
 
     def _get_values(self):
         self.accurate_vakumetr_value = self.accurate_vakumetr_controller.vakumetr_value
-        for key in self.current_sccm.keys():
-            self.current_sccm[key] = self._rrgs[key].get_current_sccm()
+        for key in self.current_sccms.keys():
+            self.current_sccms[key] = self.rrgs_controller.get_current_sccm(key)
 
         for key in self.current_temperatures.keys():
             self.current_temperatures[key] = \
