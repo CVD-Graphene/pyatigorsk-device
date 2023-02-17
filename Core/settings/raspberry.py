@@ -37,6 +37,11 @@ TERMODAT_CONFIGURATION = [
     {'INSTRUMENT_NUMBER': 3, 'LABEL': '-'},
 ]
 
+# Used in modbus communication method
+DEFAULT_MODBUS_BAUDRATE = 19200
+DEFAULT_MODBUS_TIMEOUT = 0.1
+DEFAULT_MODBUS_INSTRUMENT_NUMBER = 1
+
 VALVE_LIST = list(map(lambda x: x.get('NAME'), VALVES_CONFIGURATION))
 GAS_LIST = list(map(lambda x: x.get('NAME'), filter(lambda x: x.get("IS_GAS", False), VALVES_CONFIGURATION)))
 
