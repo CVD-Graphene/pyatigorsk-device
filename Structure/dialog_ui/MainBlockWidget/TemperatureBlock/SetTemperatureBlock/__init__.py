@@ -1,4 +1,5 @@
 import random
+from coregraphene.conf import settings
 
 from PyQt5 import QtCore
 from PyQt5.QtGui import QDoubleValidator
@@ -8,78 +9,69 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QGraphicsDropShadowEffect, \
 from Structure.dialog_ui.constants import SHADOW_BLUR_RADIUS
 from .styles import styles
 
-from coregraphene.conf import settings
+
+class TemperatureInputLine(QWidget):
+    def __init__(self,
+                 label_1="T =",
+                 label_2="°C",
+                 input_validator_args=None,
+                 parent=None):
+        super().__init__(parent=parent)
+
+        if input_validator_args is None:
+            input_validator_args = [0, 60, 2]
+
+        self.layout = QHBoxLayout()
+        self.setLayout(self.layout)
+        self.setStyleSheet(styles.input_container)
+
+        self.label_1 = QLabel()
+        self.label_1.setText(label_1)
+        self.label_1.setStyleSheet(styles.label)
+
+        self.label_2 = QLabel()
+        self.label_2.setText(label_2)
+        self.label_2.setStyleSheet(styles.label)
+
+        self.input = QLineEdit()
+        self.input.setStyleSheet(styles.input)
+        self.input.setValidator(QDoubleValidator(*input_validator_args))
+
+        self.layout.addWidget(self.label_1, stretch=1, alignment=QtCore.Qt.AlignTop)
+        self.layout.addWidget(self.input, stretch=3)
+        self.layout.addWidget(self.label_2, 1)
 
 
 class SetTemperatureBlock(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, number, parent=None):
         super().__init__(parent=parent)
+        self.number = number
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.setStyleSheet(styles.container)
         self.setAttribute(QtCore.Qt.WA_StyledBackground, True)
-        shadow = QGraphicsDropShadowEffect()
+        shadow = QGraphicsDropShadowEffect(parent=self)
         shadow.setBlurRadius(SHADOW_BLUR_RADIUS)
         self.setGraphicsEffect(shadow)
 
         self.title = QLabel()
-        self.title.setText("Set temperature")
+        self.title.setText("Set temp")
         self.title.setStyleSheet(styles.title)
         self.title.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.temps = dict()
-        for num, _ in enumerate(settings.TERMODAT_CONFIGURATION):
-            t_obj = QLabel()
-            t_obj.setText(f"Temp {num}:")
-            t_obj.setStyleSheet(styles.title)
-            t_obj.setAlignment(QtCore.Qt.AlignCenter)
-            self.temps[num] = t_obj
+        self.current_temperature = QLabel()
+        self.current_temperature.setText("T= 20.0 °C")
+        self.current_temperature.setStyleSheet(styles.title)
+        self.current_temperature.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.bottom_layout = QHBoxLayout()
+        self.speed_input = TemperatureInputLine(label_1="T' = ", label_2="°C/c")
+        self.temperature_input = TemperatureInputLine()
 
-        self.label_1 = QLabel()
-        self.label_1.setText("T =")
-        self.label_1.setStyleSheet(styles.label)
-        # self.label_1.setMaximumWidth(10)
-        # self.label_1.setWordWrap(True)
-        # sp_label_1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        # sp_label_1.setHorizontalStretch(1)
-        # self.label_1.setSizePolicy(sp_label_1)
+        self.layout.addWidget(self.speed_input, alignment=QtCore.Qt.AlignCenter)
+        self.layout.addWidget(self.current_temperature, alignment=QtCore.Qt.AlignCenter)
+        self.layout.addWidget(self.title, alignment=QtCore.Qt.AlignHCenter)
+        self.layout.addWidget(self.temperature_input, alignment=QtCore.Qt.AlignCenter)
 
-        self.label_2 = QLabel()
-        self.label_2.setText("°C")
-        self.label_2.setStyleSheet(styles.label)
-        # sp_label_2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        # sp_label_2.setHorizontalStretch(2)
-        # self.label_2.setSizePolicy(sp_label_2)
-
-        self.input = QLineEdit()
-        self.input.setStyleSheet(styles.input)
-        # self.input.setMinimumWidth(1000)
-        self.input.setValidator(QDoubleValidator(-10000.99, 10000.99, 2))
-        # sp_input = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        # sp_input.setHorizontalStretch(20)
-        # self.input.setSizePolicy(sp_input)
-        # self.bottom_layout.setContentsMargins(0, 0, 0, 0)
-        # self.bottom_layout.setSpacing(0)
-
-        # self.bottom_layout.addStretch(100)
-        # self.bottom_layout.addStretch(100)
-        # self.bottom_layout.addStretch(100)
-        self.bottom_layout.addWidget(self.label_1, stretch=1)
-        self.bottom_layout.addWidget(self.input, stretch=4)
-        # self.bottom_layout.setStretch(0, 4)
-        # # set a stretch factor of 1 for the second (the label)
-        # self.bottom_layout.setStretch(1, 1)
-        self.bottom_layout.addWidget(self.label_2, 1)
-
-        # self.bottom_layout.setAlignment(QtCore.Qt.AlignLeft)
-
-        self.layout.addWidget(self.title, QtCore.Qt.AlignHCenter)
-        for k, v in self.temps.items():
-            self.layout.addWidget(v, QtCore.Qt.AlignHCenter)
-        self.layout.addLayout(self.bottom_layout, QtCore.Qt.AlignLeft)
-
-    def set_temperature(self, num, value):
-        self.temps[num].setText(f"Temp {num}/{round(random.random() * 10)}: {value}")
+    def set_current_temperature(self, value):
+        self.current_temperature.setText(f"T= {round(random.random() * 9)}: {value} °C")

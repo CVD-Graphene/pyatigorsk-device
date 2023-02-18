@@ -149,15 +149,15 @@ class MainWindow(QMainWindow):
             pass
 
     def _update_ui_values(self):
-        self.main_interface_layout_widget.pressure_control_block.show_pressure_block.set_value(
+        self.main_interface_layout_widget.temperature_block.show_pressure_block.set_value(
             self.system.accurate_vakumetr_value
         )
         for i, gas in enumerate(self.main_interface_layout_widget.pressure_block.gases):
             gas.update_down_label(self.system.current_sccms[i])
 
         for num, temperature in self.system.current_temperatures.items():
-            self.main_interface_layout_widget.temperature_block.set_temperature.set_temperature(
-                num, temperature
+            self.main_interface_layout_widget.temperature_block.temps[num].set_current_temperature(
+                temperature
             )
 
     def get_values_and_log_state(self):

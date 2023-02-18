@@ -1,8 +1,8 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, QVBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 
-from .FlowControlWidget import FlowControlWidget
-from .ShowPressureBlock import ShowPressureBlock
+from Structure.dialog_ui.MainBlockWidget.TemperatureBlock.FlowControlWidget import FlowControlWidget
+from Structure.dialog_ui.MainBlockWidget.TemperatureBlock.ShowPressureBlock import ShowPressureBlock
 from .styles import styles
 
 
