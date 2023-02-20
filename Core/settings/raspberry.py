@@ -23,12 +23,8 @@ AIR_VALVE_CONFIGURATION = {
 
 VALVES_CONFIGURATION = [
     {'PORT': 2, "NAME": "H_2", "IS_GAS": True, "INSTRUMENT_NUMBER": 2},
-    {'PORT': 3, "NAME": "Ar", "IS_GAS": True, "INSTRUMENT_NUMBER": 3},
-    # {'PORT': 4, "NAME": "Air", "IS_GAS": True},
-    {'PORT': 17, "NAME": "CH_4", "IS_GAS": True, "INSTRUMENT_NUMBER": 1},
-    # {'PORT': 6, "NAME": "F_2", "IS_GAS": True},
-    # {'PORT': 12, "NAME": "PUMP", "IS_GAS": False},
-    # {'PORT': 13, "NAME": "AIR", "IS_GAS": False},
+    {'PORT': 3, "NAME": "Ar", "IS_GAS": True, "INSTRUMENT_NUMBER": 1},
+    {'PORT': 17, "NAME": "CH_4", "IS_GAS": True, "INSTRUMENT_NUMBER": 3},
 ]
 
 TERMODAT_CONFIGURATION = [
