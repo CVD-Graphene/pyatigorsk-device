@@ -97,7 +97,7 @@ class SetTemperatureBlock(QWidget):
         speed = self.speed_input.input.text()
         try:
             if self.system_set_speed is not None and speed:
-                self.system_set_speed(float(speed), self.number)
+                self.system_set_speed(int(speed), self.number)
         except Exception as e:
             print("Change speed exception:", e)
 
