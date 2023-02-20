@@ -81,16 +81,16 @@ class MainWindow(QMainWindow):
         #######################################################################
         # ======================= CONNECT FUNCTIONS ========================= #
 
-        # self.main_interface_layout_widget.pressure_block.o2.connect_valve_function(
-        #     self.system.change_valve_state
-        # )
         for gas in self.main_interface_layout_widget.pressure_block.gases:
             gas.connect_valve_function(self.system.change_valve_state)
             gas.connect_change_sccm_function(self.system.set_rrg_target_sccm)
 
-        # self.main_interface_layout_widget.temperature_block.current_settings.set_current_block.\
-        #     set_value_function = self.system.set_current
-        # self.system.change_valve_state("")
+        self.main_interface_layout_widget.temperature_block.system_set_temperature = \
+            self.system.set_target_temperature
+        self.main_interface_layout_widget.temperature_block.system_set_speed = \
+            self.system.set_termodat_speed
+        self.main_interface_layout_widget.temperature_block.system_set_active_regulation = \
+            self.system.set_termodat_is_active
 
     def on_create_recipe(self):
         try:

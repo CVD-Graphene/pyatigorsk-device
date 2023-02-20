@@ -133,9 +133,25 @@ class CvdSystem(BaseSystem):
         new_sccm = self.rrgs_controller.set_target_sccm(sccm, device_num)
         return new_sccm
 
-    # @BaseSystem.action
-    # def set_current(self, value):
-    #     return self.current_source_controller.set_current_value(value)
+    # =================== TERMODAT ====================== #
+
+    @BaseSystem.action
+    def set_target_temperature(self, temperature, device_num):
+        new_temperature = self.termodats_controller.set_target_temperature(
+            temperature, device_num)
+        return new_temperature
+
+    @BaseSystem.action
+    def set_termodat_speed(self, speed, device_num):
+        new_speed = self.termodats_controller.set_speed_regulation(
+            speed, device_num)
+        return new_speed
+
+    @BaseSystem.action
+    def set_termodat_is_active(self, is_active, device_num):
+        new_is_active = self.termodats_controller.set_is_active_regulation(
+            is_active, device_num)
+        return new_is_active
 
     def _get_values(self):
         self.accurate_vakumetr_value = self.accurate_vakumetr_controller.vakumetr_value

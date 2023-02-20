@@ -14,6 +14,10 @@ class TemperatureBlock(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
+        self.system_set_temperature = None
+        self.system_set_speed = None
+        self.system_set_active_regulation = None
+
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.setObjectName("temperature_block_widget")
@@ -33,6 +37,10 @@ class TemperatureBlock(QWidget):
             t_obj = SetTemperatureBlock(num)
             self.temps[num] = t_obj
 
+            t_obj.system_set_temperature = self._on_set_temperature
+            t_obj.system_set_speed = self._on_set_speed
+            t_obj.system_set_active_regulation = self._on_set_active_regulation
+
         # self.set_temperature = SetTemperatureBlock()
         # self.layout.addWidget(self.set_temperature, QtCore.Qt.AlignTop)
 
@@ -46,3 +54,33 @@ class TemperatureBlock(QWidget):
         self.layout.addWidget(self.vent_widget,
                               alignment=QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter)
 
+    def _on_set_temperature(self, value, device_num):
+        if self.system_set_temperature is not None:
+            # FOR SINGLE SETTER:
+            # self.system_set_temperature(value, device_num)
+
+            for i in range(len(self.temps)):
+                self.system_set_temperature(value, i)
+            for t_obj in self.temps.values():
+                t_obj.temperature_input.input.setText(str(value))
+
+    def _on_set_speed(self, value, device_num):
+        if self.system_set_speed is not None:
+            # FOR SINGLE SETTER:
+            # self.system_set_speed(value, device_num)
+
+            for i in range(len(self.temps)):
+                self.system_set_speed(value, i)
+            for t_obj in self.temps.values():
+                t_obj.speed_input.input.setText(str(value))
+
+    def _on_set_active_regulation(self, value, device_num):
+        if self.system_set_active_regulation is not None:
+            # FOR SINGLE SETTER:
+            # self.system_set_active_regulation(value, device_num)
+
+            for i in range(len(self.temps)):
+                self.system_set_active_regulation(value, i)
+            for t_obj in self.temps.values():
+                t_obj.is_active = value
+                t_obj.update_active_button()

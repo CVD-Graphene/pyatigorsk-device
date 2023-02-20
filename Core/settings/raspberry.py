@@ -7,24 +7,14 @@ ACCURATE_VAKUMETR_PORT = 1
 ACCURATE_VAKUMETR_USB_PORT = '/dev/ttyUSB0'  # FOR CVD-GRAPHENE USE USB1 (?)
 CURRENT_SOURCE_PORT = 3
 
-VALVES_CONFIGURATION_1 = [
-    {'PORT': 2, "NAME": "O_2", "IS_GAS": True, "INSTRUMENT_NUMBER": 1},
-    {'PORT': 3, "NAME": "N_2", "IS_GAS": True},
-    {'PORT': 4, "NAME": "Ar", "IS_GAS": True},
-    {'PORT': 17, "NAME": "C_2", "IS_GAS": True},
-    {'PORT': 6, "NAME": "F_2", "IS_GAS": True},
-    # {'PORT': 12, "NAME": "PUMP", "IS_GAS": False},
-    # {'PORT': 13, "NAME": "AIR", "IS_GAS": False},
-]
-
 AIR_VALVE_CONFIGURATION = {
     'PORT': 4,
 }
 
 VALVES_CONFIGURATION = [
-    {'PORT': 2, "NAME": "H_2", "IS_GAS": True, "INSTRUMENT_NUMBER": 2},
-    {'PORT': 17, "NAME": "Ar", "IS_GAS": True, "INSTRUMENT_NUMBER": 3},
-    {'PORT': 3, "NAME": "CH_4", "IS_GAS": True, "INSTRUMENT_NUMBER": 1},
+    {'PORT': 2, "NAME": "H_2", "INSTRUMENT_NUMBER": 2},
+    {'PORT': 17, "NAME": "Ar", "INSTRUMENT_NUMBER": 3},
+    {'PORT': 3, "NAME": "CH_4", "INSTRUMENT_NUMBER": 1},
 ]
 
 TERMODAT_CONFIGURATION = [
@@ -32,6 +22,9 @@ TERMODAT_CONFIGURATION = [
     {'INSTRUMENT_NUMBER': 2, 'LABEL': '-'},
     {'INSTRUMENT_NUMBER': 3, 'LABEL': '-'},
 ]
+
+TERMODAT_DEFAULT_SPEED = 500.0
+TERMODAT_MAX_SPEED = 65001
 
 # Used in modbus communication method
 DEFAULT_MODBUS_BAUDRATE = 19200
