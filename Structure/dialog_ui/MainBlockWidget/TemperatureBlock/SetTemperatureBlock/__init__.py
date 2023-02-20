@@ -19,7 +19,7 @@ class TemperatureInputLine(QWidget):
         super().__init__(parent=parent)
 
         if input_validator_args is None:
-            input_validator_args = [0, 60, 2]
+            input_validator_args = [0, 1000, 2]
 
         self.layout = QHBoxLayout()
         self.setLayout(self.layout)
