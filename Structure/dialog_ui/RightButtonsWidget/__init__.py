@@ -59,6 +59,7 @@ class RightButtonsWidget(QWidget):
 
         self.pause_recipe = QPushButton("▋▋/▶")
         self.is_pause = False
+        self._update_pause_button()
         self.pause_recipe.setObjectName("pause_recipe_button")
         self.pause_recipe.clicked.connect(self._on_pause)
         self.pause_recipe.setStyleSheet(styles.pause_recipe_button)
@@ -79,16 +80,16 @@ class RightButtonsWidget(QWidget):
         self.pause_recipe.hide()
 
     def _update_pause_button(self):
-        pass
-        # self.pause_recipe.setText("RUN" if self.is_pause else "PAUSE")
+        # pass
+        self.pause_recipe.setText("RUN" if self.is_pause else "PAUSE")
 
     def _on_pause(self):
         if self.on_pause_recipe:
-            print("## ON PAUSE CLICKED!")
-            self.pause_recipe.clicked.connect(self.on_pause_recipe)
+            # print("## ON PAUSE CLICKED!")
+            self.on_pause_recipe()
             current_state = self.on_get_recipe_state()
             self.is_pause = current_state == RECIPE_STATES.PAUSE
-            print(f"%% ON PAUSE INFO: state: {current_state}, is_pause: {self.is_pause}")
+            # print(f"%% ON PAUSE INFO: state: {current_state}, is_pause: {self.is_pause}")
             self._update_pause_button()
 
     def activate_manage_recipe_buttons(self):
