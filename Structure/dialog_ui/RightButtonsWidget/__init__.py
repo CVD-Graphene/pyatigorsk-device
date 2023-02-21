@@ -84,9 +84,11 @@ class RightButtonsWidget(QWidget):
 
     def _on_pause(self):
         if self.on_pause_recipe:
+            print("## ON PAUSE CLICKED!")
             self.pause_recipe.clicked.connect(self.on_pause_recipe)
             current_state = self.on_get_recipe_state()
             self.is_pause = current_state == RECIPE_STATES.PAUSE
+            print(f"%% ON PAUSE INFO: state: {current_state}, is_pause: {self.is_pause}")
             self._update_pause_button()
 
     def activate_manage_recipe_buttons(self):
