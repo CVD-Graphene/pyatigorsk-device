@@ -16,6 +16,12 @@ from Structure.system import CvdSystem
 
 from coregraphene.constants import RECIPE_STATES
 
+RECIPE_STATES_TO_STR = {
+    RECIPE_STATES.RUN: "Running",
+    RECIPE_STATES.PAUSE: "Pause",
+    RECIPE_STATES.STOP: "Stop",
+}
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -51,6 +57,9 @@ class MainWindow(QMainWindow):
             on_close=self.close,
             on_create_recipe=self.on_create_recipe,
             on_open_recipe=self.on_open_recipe,
+            on_stop_recipe=self.system.on_stop_recipe,
+            on_pause_recipe=self.system.on_pause_recipe,
+            on_get_recipe_state=self.system.get_recipe_state,
         )
         self.main_window.addWidget(self.right_buttons_layout_widget)
 
@@ -145,7 +154,9 @@ class MainWindow(QMainWindow):
             if self._current_recipe_step.get('index', -1) == index:
                 return
         self._current_recipe_step = {"name": name, "index": index}
-        self._recipe_history.append(f"{datetime.datetime.utcnow().time()} [{index}] {name}")
+        now_time = datetime.datetime.utcnow()
+        now_time_str = f"{now_time.hour}:{now_time.minute}:{now_time.second}"
+        self._recipe_history.append(f"{now_time_str} | ШАГ №{index}: {name}")
         try:
             self.main_interface_layout_widget.set_current_step(self._recipe_history[-1])
         except:
@@ -173,6 +184,9 @@ class MainWindow(QMainWindow):
             recipe_state = self.system.recipe_state
             if recipe_state != self._recipe_state:
                 self._recipe_state = recipe_state
+                self.main_interface_layout_widget.set_current_recipe_status(
+                    RECIPE_STATES_TO_STR.get(self._recipe_state, "UNDEFINED")
+                )
                 if recipe_state == RECIPE_STATES.STOP:
                     self.main_interface_layout_widget.activate_interface()
                     self.right_buttons_layout_widget.deactivate_manage_recipe_buttons()

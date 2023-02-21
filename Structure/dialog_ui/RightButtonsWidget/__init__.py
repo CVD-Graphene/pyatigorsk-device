@@ -1,3 +1,5 @@
+from coregraphene.constants import RECIPE_STATES
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, QVBoxLayout
 from .styles import styles
@@ -9,9 +11,12 @@ class RightButtonsWidget(QWidget):
                  on_create_recipe=None,
                  on_open_recipe=None,
                  on_pause_recipe=None,
-                 on_stop_recipe=None
+                 on_stop_recipe=None,
+                 on_get_recipe_state=None,
                  ):
         super().__init__()
+        self.on_pause_recipe = on_pause_recipe
+        self.on_get_recipe_state = on_get_recipe_state
 
         self.layout = QGridLayout()
         self.setLayout(self.layout)
@@ -52,10 +57,10 @@ class RightButtonsWidget(QWidget):
 
         self.manage_recipe_layout = QVBoxLayout()
 
-        self.pause_recipe = QPushButton("PAUSE")
+        self.pause_recipe = QPushButton("⏸ ▶")
+        self.is_pause = False
         self.pause_recipe.setObjectName("pause_recipe_button")
-        if on_pause_recipe:
-            self.pause_recipe.clicked.connect(on_pause_recipe)
+        self.pause_recipe.clicked.connect(self._on_pause)
         self.pause_recipe.setStyleSheet(styles.pause_recipe_button)
 
         self.stop_recipe = QPushButton("STOP")
@@ -72,6 +77,17 @@ class RightButtonsWidget(QWidget):
 
         self.stop_recipe.hide()
         self.pause_recipe.hide()
+
+    def _update_pause_button(self):
+        pass
+        # self.pause_recipe.setText("RUN" if self.is_pause else "PAUSE")
+
+    def _on_pause(self):
+        if self.on_pause_recipe:
+            self.pause_recipe.clicked.connect(self.on_pause_recipe)
+            current_state = self.on_get_recipe_state()
+            self.is_pause = current_state == RECIPE_STATES.PAUSE
+            self._update_pause_button()
 
     def activate_manage_recipe_buttons(self):
         self.select_recipe.hide()
