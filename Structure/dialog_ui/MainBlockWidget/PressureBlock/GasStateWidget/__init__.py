@@ -90,10 +90,6 @@ class GasStateWidget(QWidget):
         self._on_system_change_sccm = func
 
     def connect_valve_function(self, func):
-        # self.valve_change_func = lambda : func(self.gas_name)
-        # self.b.clicked.connect(self.valve_change_func)
-        # self.b.on_click = lambda x: x
-
         def on_click():
             ans = func(self.number)
             # print("GET ANS VALVE PRESS", ans)
@@ -142,3 +138,12 @@ class AirStateWidget(QWidget):
         self.layout.addWidget(self.gas, stretch=1, alignment=QtCore.Qt.AlignLeft)
         self.layout.addWidget(self.label, stretch=1, alignment=QtCore.Qt.AlignCenter,)
         self.layout.addWidget(self.b, stretch=4, alignment=QtCore.Qt.AlignHCenter,)
+
+    def connect_valve_function(self, func):
+        def on_click():
+            ans = func()
+            if type(ans) in [bool, int]:
+                self.b._active = not ans
+                self.b.paintEvent(event=None)
+
+        self.b.clicked.connect(on_click)
