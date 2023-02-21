@@ -57,7 +57,7 @@ class RightButtonsWidget(QWidget):
 
         self.manage_recipe_layout = QVBoxLayout()
 
-        self.pause_recipe = QPushButton("⏸ ▶")
+        self.pause_recipe = QPushButton("▋▋/▶")
         self.is_pause = False
         self.pause_recipe.setObjectName("pause_recipe_button")
         self.pause_recipe.clicked.connect(self._on_pause)
