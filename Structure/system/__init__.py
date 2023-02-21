@@ -60,6 +60,11 @@ class CvdSystem(BaseSystem):
         self.accurate_vakumetr_controller = AccurateVakumetrController(
             port=self.vakumetr_port,
         )
+
+        self.air_valve_controller = ValveController(
+            port=settings.AIR_VALVE_CONFIGURATION['PORT'],
+        )
+
         self._valves = dict()
         # self._rrgs = dict()
         for i, valve_conf in enumerate(VALVES_CONFIGURATION):
@@ -85,6 +90,7 @@ class CvdSystem(BaseSystem):
             self.accurate_vakumetr_controller,
             self.rrgs_controller,
             self.termodats_controller,
+            self.air_valve_controller,
         ]
 
         for valve in self._valves.values():
@@ -116,17 +122,21 @@ class CvdSystem(BaseSystem):
         # for controller in self._controllers:
         #     value = controller.get_value()
 
+    def _change_valve_state(self, valve, name):
+        new_state = valve.change_state()
+        print(f"Valve {name} new state: {new_state}")
+        return new_state
+
     @BaseSystem.action
     def change_valve_state(self, gas_num):
-        # t = Thread(target=self.long_function)
-        # t.start()
-        # return 1
         valve = self._valves.get(gas_num, None)
         if valve is None:
             return False
-        new_state = valve.change_state()
-        print(f"Valve {gas_num} new state: {new_state}")
-        return new_state
+        return self._change_valve_state(valve, gas_num)
+
+    @BaseSystem.action
+    def change_air_valve_state(self):
+        return self._change_valve_state(self.air_valve_controller, "AIR")
 
     @BaseSystem.action
     def set_rrg_target_sccm(self, sccm, device_num):
