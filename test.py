@@ -5,7 +5,7 @@ from Structure.system import CvdSystem
 
 
 def test_init_local():
-    system = CvdSystem()
+    system = CvdSystem(actions_list=[])
 
 
 if __name__ == '__main__':
