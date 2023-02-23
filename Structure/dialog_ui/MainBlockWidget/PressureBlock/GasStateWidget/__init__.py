@@ -83,19 +83,22 @@ class GasStateWidget(QWidget):
         self.layout.addWidget(self.info_layout_widget, stretch=1, alignment=QtCore.Qt.AlignCenter,)
         self.layout.addWidget(self.b, stretch=10, alignment=QtCore.Qt.AlignHCenter,)
 
-    def update_down_label(self, value):
+    def update_current_sccm_label(self, value):
         self.down_label.setText(f"{round(value)} sccm")
 
     def connect_change_sccm_function(self, func):
         self._on_system_change_sccm = func
+
+    def draw_is_open(self, is_open):
+        self.b._active = is_open
+        self.b.paintEvent(event=None)
 
     def connect_valve_function(self, func):
         def on_click():
             ans = func(self.number)
             # print("GET ANS VALVE PRESS", ans)
             if type(ans) in [bool, int]:
-                self.b._active = not ans
-                self.b.paintEvent(event=None)
+                self.draw_is_open(not ans)
 
         self.b.clicked.connect(on_click)
 
@@ -104,6 +107,9 @@ class GasStateWidget(QWidget):
         if self._on_system_change_sccm is not None:
             print("INPUT SCCM:", input_sccm)
             self._on_system_change_sccm(input_sccm, self.number)
+
+    def draw_set_target_sccm(self, sccm):
+        self.input.setText(str(sccm))
 
 
 class AirStateWidget(QWidget):
@@ -139,11 +145,14 @@ class AirStateWidget(QWidget):
         self.layout.addWidget(self.label, stretch=1, alignment=QtCore.Qt.AlignCenter,)
         self.layout.addWidget(self.b, stretch=4, alignment=QtCore.Qt.AlignHCenter,)
 
+    def draw_is_open(self, is_open):
+        self.b._active = is_open
+        self.b.paintEvent(event=None)
+
     def connect_valve_function(self, func):
         def on_click():
             ans = func()
             if type(ans) in [bool, int]:
-                self.b._active = not ans
-                self.b.paintEvent(event=None)
+                self.draw_is_open(not ans)
 
         self.b.clicked.connect(on_click)

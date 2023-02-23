@@ -66,3 +66,12 @@ class PressureBlock(QWidget):
         #     self.c2,
         #     self.f2,
         # ]
+
+    def draw_set_gas_target_sccm(self, sccm, gas_num):
+        self.gases[gas_num].draw_set_target_sccm(sccm)
+
+    def draw_is_open_gas(self, is_open, gas_num):
+        self.gases[gas_num].draw_is_open(is_open)
+
+    def draw_is_open_air(self, is_open):
+        self.air.draw_is_open(is_open)

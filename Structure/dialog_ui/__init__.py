@@ -15,6 +15,7 @@ from Structure.dialog_ui.components import LogWidget
 from Structure.system import CvdSystem
 
 from coregraphene.constants import RECIPE_STATES
+from Core.actions import ACTIONS
 
 RECIPE_STATES_TO_STR = {
     RECIPE_STATES.RUN: "Running",
@@ -31,7 +32,7 @@ class MainWindow(QMainWindow):
         ##############################################################################
         # ======================= SYSTEM SETUP + RECIPES =========================== #
 
-        self.system = CvdSystem()
+        self.system = CvdSystem(actions_list=ACTIONS)
         self.system.setup()
         self.system.threads_setup()
 
@@ -51,6 +52,7 @@ class MainWindow(QMainWindow):
         self.main_widget.setLayout(self.main_window)
 
         self.main_interface_layout_widget = MainBlockWidget()
+        self.milw = self.main_interface_layout_widget
         self.main_window.addWidget(self.main_interface_layout_widget)
 
         self.right_buttons_layout_widget = RightButtonsWidget(
@@ -73,6 +75,7 @@ class MainWindow(QMainWindow):
         # TABLE WIDGET FOR RECIPE ###################################
         self.table_widget = AppTableWidget(
             parent=self,
+            actions_list=ACTIONS,
             save_recipe_file=self.system.save_recipe_file,
             get_recipe_file_data=self.system.get_recipe_file_data,
             start_recipe=self.start_recipe,
@@ -103,6 +106,16 @@ class MainWindow(QMainWindow):
             self.system.set_termodat_speed
         self.main_interface_layout_widget.temperature_block.system_set_active_regulation = \
             self.system.set_termodat_is_active
+
+        #######################################################################
+        # ======================= SET UI FUNCTIONS ========================== #
+
+        self.system.set_ui_functions(
+            draw_is_open_gas=self.milw.pressure_block.draw_is_open_gas,
+            draw_is_open_air=self.milw.pressure_block.draw_is_open_air,
+            draw_set_gas_target_sccm=self.milw.pressure_block.draw_set_gas_target_sccm,
+        )
+
 
     def on_create_recipe(self):
         try:
@@ -146,6 +159,7 @@ class MainWindow(QMainWindow):
             self.main_interface_layout_widget.deactivate_interface()
             self.right_buttons_layout_widget.activate_manage_recipe_buttons()
         except Exception as e:
+            self.system.add_error("Start recipe UI error:" + str(e))
             print("Start recipe UI error:", e)
 
     def add_recipe_step(self, name="---", index=None):
@@ -167,7 +181,7 @@ class MainWindow(QMainWindow):
             self.system.accurate_vakumetr_value
         )
         for i, gas in enumerate(self.main_interface_layout_widget.pressure_block.gases):
-            gas.update_down_label(self.system.current_sccms[i])
+            gas.update_current_sccm_label(self.system.current_sccms[i])
 
         for num, temperature in self.system.current_temperatures.items():
             self.main_interface_layout_widget.temperature_block.temps[num].set_current_temperature(
