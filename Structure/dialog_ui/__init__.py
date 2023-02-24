@@ -94,22 +94,64 @@ class MainWindow(QMainWindow):
         # ======================= CONNECT FUNCTIONS ========================= #
 
         for gas in self.main_interface_layout_widget.pressure_block.gases:
+            num = gas.number
+
             gas.connect_valve_function(self.system.change_valve_state)
-            gas.connect_change_sccm_function(self.system.set_rrg_target_sccm)
+            self.system.change_gas_valve_opened.connect(gas.draw_is_open, device_num=num)
 
-        self.main_interface_layout_widget.pressure_block.air.\
+            gas.connect_change_sccm_function(self.system.set_target_rrg_sccm_action)
+            self.system.set_target_rrg_sccm_action.connect(gas.draw_set_target_sccm, device_num=gas.number)
+            self.system.full_open_rrg_action.connect(gas.draw_set_target_sccm, device_num=gas.number)
+            self.system.full_close_rrg_action.connect(gas.draw_set_target_sccm, device_num=gas.number)
+
+            self.system.get_current_rrg_sccm.connect(gas.update_current_sccm_label, device_num=gas.number)
+
+        # AIR #################
+        self.milw.pressure_block.air.\
             connect_valve_function(self.system.change_air_valve_state)
+        self.system.change_air_valve_opened.connect(self.milw.pressure_block.air.draw_is_open)
+        #######################
 
-        self.main_interface_layout_widget.temperature_block.system_set_temperature = \
-            self.system.set_target_temperature
-        self.main_interface_layout_widget.temperature_block.system_set_speed = \
-            self.system.set_termodat_speed
-        self.main_interface_layout_widget.temperature_block.system_set_active_regulation = \
+        # PUMPS ###############
+        self.milw.pressure_block.control_valve. \
+            connect_big_pump_valve_function(self.system.change_pump_valve_state)
+        self.milw.pressure_block.control_valve. \
+            connect_small_pump_valve_function(self.system.change_pump_valve_state)
+
+        self.system.change_pump_valve_opened.connect(
+            self.milw.pressure_block.control_valve.draw_big_pump_is_open,
+            device_num=self.milw.pressure_block.control_valve.big_pump_num,
+        )
+        self.system.change_pump_valve_opened.connect(
+            self.milw.pressure_block.control_valve.draw_small_pump_is_open,
+            device_num=self.milw.pressure_block.control_valve.small_pump_num,
+        )
+        #######################
+
+        # TERMODATS ###########
+        self.system.turn_on_all_termodats_action.connect(
+            self.milw.temperature_block.draw_is_active_termodats_regulation
+        )
+        self.system.turn_off_all_termodats_action.connect(
+            self.milw.temperature_block.draw_is_active_termodats_regulation
+        )
+        self.system.set_temperature_and_speed_all_termodats_action.connect(
+            self.milw.temperature_block.draw_temperature_and_speed_termodats
+        )
+        self.system.set_temperature_all_termodats_action.connect(
+            self.milw.temperature_block.draw_temperature_termodats
+        )
+
+        self.milw.temperature_block.system_set_temperature = self.system.set_target_temperature
+        self.milw.temperature_block.system_set_speed = self.system.set_termodat_speed
+        self.milw.temperature_block.system_set_active_regulation = \
             self.system.set_termodat_is_active
+        ######################
 
         #######################################################################
         # ======================= SET UI FUNCTIONS ========================== #
 
+        # TODO: remove UI functions below
         self.system.set_ui_functions(
             draw_is_open_gas=self.milw.pressure_block.draw_is_open_gas,
             draw_is_open_air=self.milw.pressure_block.draw_is_open_air,
@@ -180,8 +222,8 @@ class MainWindow(QMainWindow):
         self.main_interface_layout_widget.temperature_block.show_pressure_block.set_value(
             self.system.accurate_vakumetr_value
         )
-        for i, gas in enumerate(self.main_interface_layout_widget.pressure_block.gases):
-            gas.update_current_sccm_label(self.system.current_sccms[i])
+        # for i, gas in enumerate(self.main_interface_layout_widget.pressure_block.gases):
+        #     gas.update_current_sccm_label(self.system.current_sccms[i])
 
         for num, temperature in self.system.current_temperatures.items():
             self.main_interface_layout_widget.temperature_block.temps[num].set_current_temperature(

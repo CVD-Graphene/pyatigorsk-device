@@ -9,9 +9,12 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QFi
     QDoubleSpinBox, QSpinBox
 from PyQt5.QtCore import QSize, Qt, QTime
 
-from coregraphene.actions import ACTIONS, get_action_by_name, AppAction
+from coregraphene.auto_actions import AppAction
+from coregraphene.utils.actions import get_action_by_name
 from coregraphene.conf import settings
 from .styles import styles
+
+from Core.actions import ACTIONS
 
 
 def random_str(length=5):
@@ -76,10 +79,11 @@ class AppQDoubleSpinBox(QDoubleSpinBox):
 
 class TableRow(object):
 
-    def __init__(self, table, row_id, items=None):
+    def __init__(self, table, row_id, actions_list, items=None):
         self.table = table
         self.row_id = row_id
         self.items = None
+        self.actions_list = actions_list
 
         self.combo = QComboBox()
         # self.combo.te
@@ -94,7 +98,7 @@ class TableRow(object):
 
         if items is not None and len(items) >= 5:
             items = list(map(lambda x: str(x).strip(), items))
-            action, i = get_action_by_name(name=items[0])
+            action, i = get_action_by_name(items[0], self.actions_list)
             action: AppAction = action
             if action is not None:
                 self.combo.setCurrentIndex(i)
@@ -224,12 +228,15 @@ class AppTableWidget(QWidget):
 
     def __init__(self,
                  parent=None,
+                 actions_list=None,
                  save_recipe_file=None,
                  get_recipe_file_data=None,
                  start_recipe=None,
                  ):
         # You must call the super class method
         super().__init__(parent)
+
+        self.actions_list = actions_list
 
         self.save_recipe_file = save_recipe_file
         self.get_recipe_file_data = get_recipe_file_data
@@ -259,7 +266,7 @@ class AppTableWidget(QWidget):
             QApplication.desktop().height() * 0.99
         ))  # Set sizes
         self.row_count = 1
-        self.rows = [TableRow(table=self, row_id=0)]
+        self.rows = [TableRow(table=self, row_id=0, actions_list=self.actions_list)]
 
         table = QTableWidget()  # Create a table
         table.setColumnCount(5)  # Set three columns
@@ -365,10 +372,10 @@ class AppTableWidget(QWidget):
             self.table.setRowCount(self.row_count)
             self.rows = []
             for i, row in enumerate(data):
-                table_row = TableRow(table=self, row_id=i, items=row)
+                table_row = TableRow(table=self, row_id=i, items=row, actions_list=self.actions_list)
                 self.rows.append(table_row)
             self._update_table()
-            # self.rows = [TableRow(table=self, row_id=0)]
+            # self.rows = [TableRow(table=self, row_id=0, actions_list=self.actions_list)]
             file_name = os.path.basename(file_path)
             self.file_name_widget.setText(file_name)
             self.file_name_widget.setEnabled(False)
@@ -404,7 +411,7 @@ class AppTableWidget(QWidget):
     def _add_row(self):
         self.row_count += 1
         self.table.setRowCount(self.row_count)  # and one row
-        self.rows.append(TableRow(table=self, row_id=self.row_count - 1))
+        self.rows.append(TableRow(table=self, row_id=self.row_count - 1, actions_list=self.actions_list))
         self._update_table()
 
     def get_values(self):
@@ -483,6 +490,6 @@ class AppTableWidget(QWidget):
         self.hide()
 
         self.row_count = 1
-        self.rows = [TableRow(table=self, row_id=0, items=None)]
+        self.rows = [TableRow(table=self, row_id=0, items=None, actions_list=self.actions_list)]
         self.table.setRowCount(self.row_count)  # and one row
         self._update_table()
