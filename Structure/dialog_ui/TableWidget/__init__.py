@@ -72,7 +72,7 @@ class AppQSpinBox(QSpinBox):
 
 
 class AppQDoubleSpinBox(QDoubleSpinBox):
-    def __init__(self, parent=None, maximum=200):
+    def __init__(self, parent=None, maximum=10000000):
         super().__init__(parent=parent)
         self.setMaximum(maximum)
 
