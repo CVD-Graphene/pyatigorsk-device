@@ -3,7 +3,7 @@ from coregraphene.ui import StyleSheet
 styles = StyleSheet({
     "container": {
         "name": "QWidget#valve_control_widget",
-        "max-height": "120px",
+        "max-height": "200px",
         # "max-width": "5000px",
         # "width": "100%",
         # "height": '100%',
