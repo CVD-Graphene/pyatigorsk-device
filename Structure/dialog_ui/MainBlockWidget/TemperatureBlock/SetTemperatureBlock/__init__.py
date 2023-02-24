@@ -93,6 +93,16 @@ class SetTemperatureBlock(QWidget):
     def set_current_temperature(self, value):
         self.current_temperature.setText(f"T= {round(random.random() * 9)}: {value} °C")
 
+    def draw_target_temperature(self, value):
+        self.temperature_input.input.setText(str(value))
+
+    def draw_target_speed(self, value):
+        self.speed_input.input.setText(str(value))
+
+    def set_is_active_regulation(self, is_active):
+        self.is_active = is_active
+        self.update_active_button()
+
     def _on_change_speed(self):
         speed = self.speed_input.input.text()
         try:

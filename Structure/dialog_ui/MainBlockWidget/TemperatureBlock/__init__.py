@@ -82,5 +82,17 @@ class TemperatureBlock(QWidget):
             for i in range(len(self.temps)):
                 self.system_set_active_regulation(value, i)
             for t_obj in self.temps.values():
-                t_obj.is_active = value
-                t_obj.update_active_button()
+                t_obj.set_is_active_regulation(value)
+
+    def draw_is_active_termodats_regulation(self, is_active):
+        for t_obj in self.temps.values():
+            t_obj.set_is_active_regulation(is_active)
+
+    def draw_temperature_and_speed_termodats(self, temperature, speed):
+        for t_obj in self.temps.values():
+            t_obj.draw_target_temperature(temperature)
+            t_obj.draw_target_speed(speed)
+
+    def draw_temperature_termodats(self, temperature):
+        for t_obj in self.temps.values():
+            t_obj.draw_target_temperature(temperature)

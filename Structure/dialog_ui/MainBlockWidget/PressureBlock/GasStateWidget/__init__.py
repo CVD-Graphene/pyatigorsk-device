@@ -84,12 +84,14 @@ class GasStateWidget(QWidget):
         self.layout.addWidget(self.b, stretch=10, alignment=QtCore.Qt.AlignHCenter,)
 
     def update_current_sccm_label(self, value):
-        self.down_label.setText(f"{round(value)} sccm")
+        # print("NEW VALUE CURRENT SCCM DRAW:", value)
+        self.down_label.setText(f"{round(value, 1)} sccm")
 
     def connect_change_sccm_function(self, func):
         self._on_system_change_sccm = func
 
     def draw_is_open(self, is_open):
+        # print("Draw is opened...", is_open, self.gas_name)
         self.b._active = is_open
         self.b.paintEvent(event=None)
 
@@ -98,7 +100,7 @@ class GasStateWidget(QWidget):
             ans = func(self.number)
             # print("GET ANS VALVE PRESS", ans)
             if type(ans) in [bool, int]:
-                self.draw_is_open(not ans)
+                self.draw_is_open(ans)
 
         self.b.clicked.connect(on_click)
 
