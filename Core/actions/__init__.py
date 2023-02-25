@@ -4,6 +4,7 @@ from coregraphene.auto_actions import AppAction, IntKeyArgument, Argument, Posit
     TimeEditArgument, GasListArgument, SccmArgument, ValveListArgument, PositiveFloatKeyArgument
 from coregraphene.conf import settings
 from coregraphene.constants import RECIPE_STATES
+from coregraphene.recipe.exceptions import NotAchievingRecipeStepGoal
 
 ACTIONS_NAMES = settings.ACTIONS_NAMES
 TABLE_ACTIONS_NAMES = settings.TABLE_ACTIONS_NAMES
@@ -173,7 +174,7 @@ class SetRrgSccmAndKeepToPressureDeltaAction(AppAction):
                 break  # TODO: Or return here?
             time.sleep(1)
             if MAX_RECIPE_STEP_SECONDS and (time.time() - start_time >= MAX_RECIPE_STEP_SECONDS):
-                break
+                raise NotAchievingRecipeStepGoal
 
         action_close_rrg = FullCloseSingleRrgAction()
         action_close_rrg.set_functions(system=self.system,)
@@ -204,7 +205,7 @@ class SmallPumpOutToPressureAction(AppAction):
     """
     name = TABLE_ACTIONS_NAMES.SMALL_PUMP_OUT_CAMERA
     key = ACTIONS_NAMES.SMALL_PUMP_OUT_CAMERA
-    args_info = [PositiveFloatKeyArgument]
+    args_info = [PositiveFloatKeyArgument, TimeEditArgument]
 
     def action(self, target_pressure):
         target_pressure = float(target_pressure)
@@ -219,7 +220,7 @@ class SmallPumpOutToPressureAction(AppAction):
             time.sleep(1)
             if MAX_RECIPE_STEP_SECONDS and (time.time() - start_time >= MAX_RECIPE_STEP_SECONDS):
                 self.system.add_error_log(f"Откачка не завершилась до достижения максимального времени")
-                break
+                raise NotAchievingRecipeStepGoal
 
         self.system.change_pump_valve_opened(False, index)
 
@@ -247,11 +248,11 @@ class BigPumpOutToPressureAction(AppAction):
             time.sleep(1)
             delta_time = time.time() - start_time
             if MAX_RECIPE_STEP_SECONDS and (delta_time >= MAX_RECIPE_STEP_SECONDS):
-                break
+                raise NotAchievingRecipeStepGoal
 
             if delta_time >= max_seconds:
                 self.system.add_error_log(f"Откачка не завершилась до достижения максимального времени")
-                break
+                raise NotAchievingRecipeStepGoal
 
         self.system.change_pump_valve_opened(False, index)
 
@@ -352,7 +353,7 @@ class VentilateCameraTableAction(AppAction):
             time.sleep(1)
             delta_time = time.time() - start_time
             if MAX_RECIPE_STEP_SECONDS and (delta_time >= MAX_RECIPE_STEP_SECONDS):
-                break
+                raise NotAchievingRecipeStepGoal
 
         # 5 STEP
         open_air_valve = OpenValveAction()
@@ -375,7 +376,7 @@ class VentilateCameraTableAction(AppAction):
 
             delta_time = time.time() - start_time
             if MAX_RECIPE_STEP_SECONDS and (delta_time >= MAX_RECIPE_STEP_SECONDS):
-                break
+                raise NotAchievingRecipeStepGoal
 
         # 7 STEP
         close_air_valve = CloseValveAction()
@@ -391,7 +392,6 @@ class WaitForTemperatureAllTermodatsAction(AppAction):
 
     при исчерпании лимита пишем уведомление
     что не удалось установить температуру и останавливаем всю прогу
-    (уставка печки на 20 градусов, печка выкл, выкл все клапаны, все ррг на ноль)
     """
     name = TABLE_ACTIONS_NAMES.WAIT_TARGET_TEMPERATURE
     key = ACTIONS_NAMES.WAIT_TARGET_TEMPERATURE
@@ -414,11 +414,47 @@ class WaitForTemperatureAllTermodatsAction(AppAction):
             time.sleep(1)
             delta_time = time.time() - start_time
             if MAX_RECIPE_STEP_SECONDS and (delta_time >= MAX_RECIPE_STEP_SECONDS):
-                break
+                raise NotAchievingRecipeStepGoal
 
             if delta_time >= max_seconds:
                 self.system.add_error_log(f"Достижение температуры не завершилось до достижения максимального времени")
-                break
+                raise NotAchievingRecipeStepGoal
+
+
+class QuickShutdownAllDeviceElementsAction(AppAction):
+    """
+    Быстрое выключение всех активных приборов установки
+
+    1. уставка печки на 20 градусов,
+    2. печка выкл,
+    3. выкл все клапаны,
+    4. все ррг на ноль
+    """
+    name = TABLE_ACTIONS_NAMES.QUICK_SHUTDOWN_DEVICE
+    key = ACTIONS_NAMES.QUICK_SHUTDOWN_DEVICE
+    args_info = []
+
+    def action(self):
+        # 1 STEP: уставка печки на 20 градусов
+        set_termodat_values = SetTemperatureAndSpeedAllTermodatsTableAction()
+        set_termodat_values.set_functions(system=self.system)
+        set_termodat_values.action(20, settings.TERMODAT_DEFAULT_SPEED)
+
+        # 2 STEP: выключить печку
+        turn_off_termodats = TurnOffAllTermodatsTableAction()
+        turn_off_termodats.set_functions(system=self.system)
+        turn_off_termodats.action()
+
+        # 3 STEP: закрыть все клапаны
+        close_all_valves = CloseAllValvesAction()
+        close_all_valves.set_functions(system=self.system)
+        close_all_valves.action()
+
+        # 4 STEP: полностью закрыть все ррг
+        close_rrg = FullCloseSingleRrgAction()
+        close_rrg.set_functions(system=self.system)
+        for gas_name in settings.GAS_LIST:
+            close_rrg.action(gas_name)
 
 
 ACTIONS = [
@@ -440,5 +476,4 @@ ACTIONS = [
 
     SmallPumpOutToPressureAction(),
     BigPumpOutToPressureAction(),
-
 ]

@@ -25,6 +25,8 @@ class ACTIONS_NAMES:
     SET_SPEED_FOR_TERMODAT_DEVICE = "SET_SPEED_FOR_TERMODAT_DEVICE"
 
     PAUSE = "PAUSE"
+    QUICK_SHUTDOWN_DEVICE = "QUICK_SHUTDOWN_DEVICE"
+
     FULL_OPEN_PUMP = "FULL_OPEN_PUMP"
     FULL_CLOSE_PUMP = "FULL_CLOSE_PUMP"
     STABILIZE_PRESSURE = "STABILIZE_PRESSURE"
@@ -57,6 +59,8 @@ class TABLE_ACTIONS_NAMES:
     SET_SPEED_FOR_TERMODAT_DEVICE = "Установить скорость (термодат)"
 
     PAUSE = "Пауза"
+    QUICK_SHUTDOWN_DEVICE = "Полное выключение установки"
+
     FULL_OPEN_PUMP = "Открыть клапан насоса"
     FULL_CLOSE_PUMP = "Закрыть клапан насоса"
     STABILIZE_PRESSURE = "Стабилизировать давление"
