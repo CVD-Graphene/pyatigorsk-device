@@ -72,9 +72,10 @@ class AppQSpinBox(QSpinBox):
 
 
 class AppQDoubleSpinBox(QDoubleSpinBox):
-    def __init__(self, parent=None, maximum=10000000):
+    def __init__(self, parent=None, maximum=10000000, decimals=6):
         super().__init__(parent=parent)
         self.setMaximum(maximum)
+        self.setDecimals(decimals)
 
 
 class TableRow(object):

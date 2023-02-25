@@ -1,5 +1,6 @@
 import gc
 
+from Core.recipe_runner import AppRecipeRunner
 from Structure.system.system_actions import (
     SetTargetRrgSccmAction,
     FullCloseRrgAction,
@@ -28,6 +29,8 @@ LOCAL_MODE = settings.LOCAL_MODE
 
 
 class CvdSystem(BaseSystem):
+
+    recipe_class = AppRecipeRunner
 
     def _determine_attributes(self):
         used_ports = []
