@@ -148,17 +148,6 @@ class MainWindow(QMainWindow):
             self.system.set_termodat_is_active
         ######################
 
-        #######################################################################
-        # ======================= SET UI FUNCTIONS ========================== #
-
-        # TODO: remove UI functions below
-        self.system.set_ui_functions(
-            draw_is_open_gas=self.milw.pressure_block.draw_is_open_gas,
-            draw_is_open_air=self.milw.pressure_block.draw_is_open_air,
-            draw_set_gas_target_sccm=self.milw.pressure_block.draw_set_gas_target_sccm,
-        )
-
-
     def on_create_recipe(self):
         try:
             self.table_widget.on_create_recipe()
