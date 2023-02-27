@@ -1,3 +1,5 @@
+import sys
+# sys.settrace()
 import os
 os.environ.setdefault('GRAPHENE_SETTINGS_MODULE', 'Core.settings')
 

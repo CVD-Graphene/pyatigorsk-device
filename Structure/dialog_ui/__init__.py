@@ -181,9 +181,13 @@ class MainWindow(QMainWindow):
     def start_recipe(self):
         try:
             recipe = self.table_widget.get_values()
-            ready = self.system.run_recipe(recipe)
+            self.system.set_recipe(recipe)
+            ready = self.system.check_recipe_is_correct()
+            # ready = self.system.run_recipe(recipe)
             if not ready:
                 return
+            # self.system.start_recipe()
+            self.system.run_recipe()
             self._recipe_history = []
             self.add_recipe_step("Инициализация рецепта")
             self.table_widget.on_close()
