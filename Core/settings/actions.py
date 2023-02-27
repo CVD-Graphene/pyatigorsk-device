@@ -34,31 +34,32 @@ class ACTIONS_NAMES:
 
 class TABLE_ACTIONS_NAMES:
     TURN_ON_PUMP = "Включить насос"
-    OPEN_VALVE = "Открыть клапан"
-    CLOSE_VALVE = "Закрыть клапан"
+
+    OPEN_VALVE = "Открыть клапан" + " [клапан]"
+    CLOSE_VALVE = "Закрыть клапан" + " [клапан]"
     CLOSE_ALL_VALVES = "Закрыть все клапаны"
 
-    FULL_OPEN_RRG = "Полностью открыть РРГ"
-    FULL_CLOSE_RRG = "Полностью закрыть РРГ"
-    SET_RRG_VALUE = "Значение на РРГ"
-    SET_RRG_VALUE_WITH_PAUSE = "Значение на РРГ с паузой"
-    SET_RRG_AND_KEEP_TO_PRESSURE = "Значение на РРГ на давление"
+    FULL_OPEN_RRG = "Полностью открыть РРГ" + " [газ]"
+    FULL_CLOSE_RRG = "Полностью закрыть РРГ" + " [газ]"
+    SET_RRG_VALUE = "Значение на РРГ" + " [газ, sccm]"
+    SET_RRG_VALUE_WITH_PAUSE = "Значение на РРГ с паузой" + " [газ, sccm, мммм:сс]"
+    SET_RRG_AND_KEEP_TO_PRESSURE = "Значение на РРГ на давление" + " [газ, sccm, давление]"
 
-    PUMP_OUT_CAMERA = "Откачать камеру"
-    VENTILATE_CAMERA = "Провентилировать камеру"
-    SMALL_PUMP_OUT_CAMERA = "Откачать камеру игольчатым вентилем"
+    PUMP_OUT_CAMERA = "Откачать камеру" + " [давление, лимит времени]"
+    VENTILATE_CAMERA = "Провентилировать камеру" + " [x, y, температура]"
+    SMALL_PUMP_OUT_CAMERA = "Откачать камеру игольчатым вентилем" + " [давление, лимит времени]"
 
     TURN_ON_ALL_TERMODATS = "Включить все печки"
     TURN_OFF_ALL_TERMODATS = "Выключить все печки"
-    SET_T_V_ALL_TERMODATS = "Установить T и V на печки"
-    WAIT_TARGET_TEMPERATURE = "Ждать установленной T печек"
+    SET_T_V_ALL_TERMODATS = "Установить T и V на печки" + " [температура, скорость]"
+    WAIT_TARGET_TEMPERATURE = "Ждать установленной T печек" + " [температура, лимит времени]"
 
     SET_TEMPERATURE = "Установить температуру"
     SET_TEMPERATURE_IN_TIME = "Установить температуру за время"
     SET_TEMPERATURE_FOR_TERMODAT_DEVICE = "Установить температуру (термодат)"
     SET_SPEED_FOR_TERMODAT_DEVICE = "Установить скорость (термодат)"
 
-    PAUSE = "Пауза"
+    PAUSE = "Пауза" + " [время мммм:сс]"
     QUICK_SHUTDOWN_DEVICE = "Полное выключение установки"
 
     FULL_OPEN_PUMP = "Открыть клапан насоса"
