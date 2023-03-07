@@ -1,4 +1,7 @@
 import os
+
+from PyQt5 import QtGui
+
 os.environ.setdefault('GRAPHENE_SETTINGS_MODULE', 'Core.settings')
 
 from Structure.system import CvdSystem

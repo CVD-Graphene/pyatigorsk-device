@@ -92,8 +92,8 @@ class GasStateWidget(QWidget):
 
     def draw_is_open(self, is_open):
         # print("Draw is opened...", is_open, self.gas_name)
-        self.b._active = is_open
-        self.b.paintEvent(event=None)
+        # self.b._active = is_open
+        self.b.update_active(is_open)
 
     def connect_valve_function(self, func):
         def on_click():
@@ -148,13 +148,12 @@ class AirStateWidget(QWidget):
         self.layout.addWidget(self.b, stretch=4, alignment=QtCore.Qt.AlignHCenter,)
 
     def draw_is_open(self, is_open):
-        self.b._active = is_open
-        self.b.paintEvent(event=None)
+        self.b.update_active(is_open)
 
     def connect_valve_function(self, func):
         def on_click():
             ans = func()
             if type(ans) in [bool, int]:
-                self.draw_is_open(not ans)
+                self.draw_is_open(ans)
 
         self.b.clicked.connect(on_click)

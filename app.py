@@ -1,6 +1,9 @@
 import sys
 # sys.settrace()
 import os
+
+from PyQt5 import QtGui
+
 os.environ.setdefault('GRAPHENE_SETTINGS_MODULE', 'Core.settings')
 
 from PyQt5.QtWidgets import (
@@ -10,7 +13,7 @@ from PyQt5.QtCore import Qt
 from Structure.dialog_ui import MainWindow
 
 os.environ["QT_IM_MODULE"] = "qtvirtualkeyboard"
-
+# print("FORMATS", QtGui.QImageReader.supportedImageFormats())
 
 # sys.exit(0)
 app = QApplication([])

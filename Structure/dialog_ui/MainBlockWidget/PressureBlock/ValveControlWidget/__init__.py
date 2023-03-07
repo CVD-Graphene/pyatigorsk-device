@@ -56,12 +56,10 @@ class ValveControlWidget(QWidget):
         self.layout.addLayout(self.valves_layout)
 
     def draw_big_pump_is_open(self, is_open):
-        self.big_pump._active = is_open
-        self.big_pump.paintEvent(event=None)
+        self.big_pump.update_active(is_open)
 
     def draw_small_pump_is_open(self, is_open):
-        self.small_pump._active = is_open
-        self.small_pump.paintEvent(event=None)
+        self.small_pump.update_active(is_open)
 
     def connect_big_pump_valve_function(self, func):
         def on_click():
