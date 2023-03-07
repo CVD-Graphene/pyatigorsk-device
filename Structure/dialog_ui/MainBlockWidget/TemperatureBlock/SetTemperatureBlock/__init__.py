@@ -91,7 +91,8 @@ class SetTemperatureBlock(QWidget):
         self.layout.addWidget(self.state_button, alignment=QtCore.Qt.AlignCenter)
 
     def set_current_temperature(self, value):
-        self.current_temperature.setText(f"T= {round(random.random() * 9)}: {value} °C")
+        # self.current_temperature.setText(f"T= {round(random.random() * 9)}: {value} °C")
+        self.current_temperature.setText(f"T = {value} °C")
 
     def draw_target_temperature(self, value):
         self.temperature_input.input.setText(str(value))
