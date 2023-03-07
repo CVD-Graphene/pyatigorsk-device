@@ -153,7 +153,7 @@ class CvdSystem(BaseSystem):
 
     def _change_valve_state(self, valve, name):
         new_state = valve.change_state()
-        print(f"Valve {name} new state: {new_state}")
+        # print(f"Valve {name} new state: {new_state}")
         return new_state
 
     @BaseSystem.action

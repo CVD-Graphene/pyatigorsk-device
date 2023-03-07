@@ -71,7 +71,7 @@ class ButterflyButton(QLabel):
 
     def update_active(self, is_active):
         self._active = is_active
-        print("On click butterfly::", self._active)
+        # print("On click butterfly::", self._active)
         self.update_ui()
 
     def update_ui(self):
