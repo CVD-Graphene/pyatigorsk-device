@@ -2,12 +2,8 @@ import os
 os.environ.setdefault('GRAPHENE_SETTINGS_MODULE', 'Core.settings')
 
 import tracemalloc
-from time import sleep
-
-from memory_profiler import profile
 
 from PyQt5 import QtGui
-from Structure.system import CvdSystem
 
 from PyQt5.QtWidgets import (
     QApplication,
@@ -33,19 +29,18 @@ def start():
     # w.setWindowFlags(Qt.WindowType_Mask)
     app.exec()
 
-from Core.actions import ACTIONS
-
-@profile
-def start_system():
-    system = CvdSystem(actions_list=ACTIONS)
-    system.setup()
-    system.threads_setup()
-    try:
-        while True:
-            sleep(1)
-    except BaseException:
-        system.stop()
-        system.destructor()
+# from Core.actions import ACTIONS
+#
+# def start_system():
+#     system = CvdSystem(actions_list=ACTIONS)
+#     system.setup()
+#     system.threads_setup()
+#     try:
+#         while True:
+#             sleep(1)
+#     except BaseException:
+#         system.stop()
+#         system.destructor()
 
 
 if __name__ == '__main__':
