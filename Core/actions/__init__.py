@@ -471,6 +471,7 @@ ACTIONS = [
     TurnOnAllTermodatsTableAction(),
     TurnOffAllTermodatsTableAction(),
     SetTemperatureAndSpeedAllTermodatsTableAction(),
+    WaitForTemperatureAllTermodatsAction(),
 
     PauseAction(),
 
