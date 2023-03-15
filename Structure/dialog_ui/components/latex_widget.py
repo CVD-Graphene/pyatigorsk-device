@@ -37,27 +37,39 @@ class LatexWidget(QtWidgets.QWidget):
                  fon_size_mult=1.5,
                  top_y=0.75,
                  ):
-        super(QtWidgets.QWidget, self).__init__(parent)
+        super().__init__(parent)
         if rgb is None:
             self.rgb = [200, 200, 200]
         else:
             self.rgb = rgb
-        self.fon_size_mult =fon_size_mult
+        self.fon_size_mult = fon_size_mult
         self.top_y = top_y
-        self._setText(text)
 
-    def _setText(self, mathText):
-        # self.setStyleSheet(styles.container)
         l = QVBoxLayout(self)
         l.setContentsMargins(0, 0, 0, 0)
 
         r, g, b, a = self.palette().base().color().getRgbF()
-        facecolor = (self.rgb[0]/255, self.rgb[1]/255, self.rgb[2]/255)
+        facecolor = (self.rgb[0] / 255, self.rgb[1] / 255, self.rgb[2] / 255)
         self._figure = Figure(edgecolor=(r, g, b), facecolor=facecolor)
         self._canvas = FigureCanvas(self._figure)
         # self._canvas.siz
         l.addWidget(self._canvas)
-        self._figure.clear()
+
+        self._setText(text)
+
+    def _setText(self, mathText):
+        # self.setStyleSheet(styles.container)
+        # l = QVBoxLayout(self)
+        # l.setContentsMargins(0, 0, 0, 0)
+
+        # r, g, b, a = self.palette().base().color().getRgbF()
+        # facecolor = (self.rgb[0]/255, self.rgb[1]/255, self.rgb[2]/255)
+        # self._figure = Figure(edgecolor=(r, g, b), facecolor=facecolor)
+        # self._canvas = FigureCanvas(self._figure)
+        # # self._canvas.siz
+        # l.addWidget(self._canvas)
+        # self._figure.clear()
+
         text = self._figure.suptitle(
             mathText,
             x=0.1,
@@ -66,7 +78,7 @@ class LatexWidget(QtWidgets.QWidget):
             verticalalignment='top',
             size=QtGui.QFont().pointSize() * self.fon_size_mult
         )
-        self._canvas.draw()
+        # self._canvas.draw()
 
         (x0, y0), (x1, y1) = text.get_window_extent().get_points()
         w = x1 - x0
@@ -74,6 +86,8 @@ class LatexWidget(QtWidgets.QWidget):
 
         self._figure.set_size_inches(w / 80, h / 80)
         self.setFixedSize(w, h)
+        self._canvas.draw()
+        # self._figure.show()
 
     def setText(self, mathText):
         # self.__init__(mathText=mathText)

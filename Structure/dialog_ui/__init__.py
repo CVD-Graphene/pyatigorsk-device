@@ -1,4 +1,7 @@
 import datetime
+import gc
+import logging
+import tracemalloc
 from time import sleep
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -68,7 +71,7 @@ class MainWindow(QMainWindow):
         # Устанавливаем центральный виджет Window.
         self.setCentralWidget(self.main_widget)
 
-        self.timer = QtCore.QTimer(self)
+        self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.get_values_and_log_state)
         self.timer.start(500)
 
@@ -85,6 +88,8 @@ class MainWindow(QMainWindow):
         self.log = None
         self.log_widget = LogWidget(on_close=self.clear_log, parent=self)
         self.log_widget.move(100, 100)
+
+        # return
 
         # self.threadpool = QThreadPool()
         # print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -215,6 +220,7 @@ class MainWindow(QMainWindow):
         self.main_interface_layout_widget.temperature_block.show_pressure_block.set_value(
             self.system.accurate_vakumetr_value
         )
+
         # for i, gas in enumerate(self.main_interface_layout_widget.pressure_block.gases):
         #     gas.update_current_sccm_label(self.system.current_sccms[i])
 
@@ -223,9 +229,20 @@ class MainWindow(QMainWindow):
                 temperature
             )
 
+    def memory_snapshot(self):
+        pass
+        # print("MEMORY:", deep_getsizeof(self, set()))
+        # gc.collect()
+        # snapshot = tracemalloc.take_snapshot()
+        # # snapshot.dump(f'test_{datetime.datetime.now()}.txt')
+        #
+        # for i, stat in enumerate(snapshot.statistics(f'filename')[:5], 1):
+        #     print("top_current", i, str(stat))
+        #     # logging.info("top_current", i=i, stat=str(stat))
+
     def get_values_and_log_state(self):
         try:
-
+            self.memory_snapshot()
             self.system.get_values()
             recipe_step = self.system.current_recipe_step
             if recipe_step:

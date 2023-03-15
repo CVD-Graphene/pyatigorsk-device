@@ -56,7 +56,10 @@ class ParameterLatexLabel(QWidget):
         self.setGraphicsEffect(shadow)
 
     def setText(self, text):
-        self.math.hide()
-        self.math = LatexWidget(text, parent=self)
+        # self.math.hide()
+        self.math.setText(text)
+        # self.math.update()
+        # self.math = LatexWidget(text, parent=self)
         # self.layout.addWidget(self.math, alignment=QtCore.Qt.AlignCenter)
-        self.math.show()
+        # self.layout.addWidget(self.math, alignment=QtCore.Qt.AlignCenter)
+        # self.math.show()
