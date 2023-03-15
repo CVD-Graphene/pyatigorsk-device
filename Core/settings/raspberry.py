@@ -18,8 +18,8 @@ VALVES_CONFIGURATION = [
 MAX_SCCM_VALUE = 200
 
 PUMPS_CONFIGURATION = [
-    {'PORT': 22, "NAME": "BIG_PUMP", },  # Не менять название
-    {'PORT': 5, "NAME": "SMALL_PUMP", },  # Не менять название
+    {'PORT': 5, "NAME": "BIG_PUMP", },  # Не менять название !!!!!
+    {'PORT': 22, "NAME": "SMALL_PUMP", },  # Не менять название !!!!!
 ]
 BIG_PUMP_INDEX = 0
 SMALL_PUMP_INDEX = 1
