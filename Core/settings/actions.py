@@ -43,7 +43,7 @@ class TABLE_ACTIONS_NAMES:
     FULL_CLOSE_RRG = "Полностью закрыть РРГ" + " [газ]"
     SET_RRG_VALUE = "Значение на РРГ" + " [газ, sccm]"
     SET_RRG_VALUE_WITH_PAUSE = "Значение на РРГ с паузой" + " [газ, sccm, мммм:сс]"
-    SET_RRG_AND_KEEP_TO_PRESSURE = "Значение на РРГ на давление" + " [газ, sccm, давление]"
+    SET_RRG_AND_KEEP_TO_PRESSURE = "Повысить давление газа на определённую величину [газ, sccm, давление]"
 
     PUMP_OUT_CAMERA = "Откачать камеру" + " [давление, лимит времени]"
     VENTILATE_CAMERA = "Провентилировать камеру" + " [x, y, температура]"
@@ -52,7 +52,7 @@ class TABLE_ACTIONS_NAMES:
     TURN_ON_ALL_TERMODATS = "Включить все печки"
     TURN_OFF_ALL_TERMODATS = "Выключить все печки"
     SET_T_V_ALL_TERMODATS = "Установить T и V на печки" + " [температура, скорость]"
-    WAIT_TARGET_TEMPERATURE = "Ждать установленной T печек" + " [температура, лимит времени]"
+    WAIT_TARGET_TEMPERATURE = "Ждать установления температуры [температура, мммм:сс]"
 
     SET_TEMPERATURE = "Установить температуру"
     SET_TEMPERATURE_IN_TIME = "Установить температуру за время"

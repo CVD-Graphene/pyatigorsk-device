@@ -477,4 +477,5 @@ ACTIONS = [
 
     SmallPumpOutToPressureAction(),
     BigPumpOutToPressureAction(),
+    # VentilateCameraTableAction(),
 ]
