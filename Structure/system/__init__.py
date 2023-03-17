@@ -122,6 +122,7 @@ class CvdSystem(BaseSystem):
         }
 
     def _init_actions(self):
+        super()._init_actions()
 
         # ===== RRGs ======= #
         self.set_target_rrg_sccm_action = SetTargetRrgSccmAction(system=self)

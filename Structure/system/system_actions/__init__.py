@@ -90,3 +90,11 @@ class GetCurrentFlowRrgControllerAction(ManyDeviceControllerAction):
         value = float(value) / 100 * 2.0
         # print("CALL FUNC CURRENT FLOW CONTROLLER:", value)
         return value
+
+
+# ================= UI RECIPE ============== #
+
+
+class SetCurrentRecipeStepAction(SystemAction):
+    def _call_function(self, name, index=None):
+        return self._system._set_current_recipe_step(name, index=index)

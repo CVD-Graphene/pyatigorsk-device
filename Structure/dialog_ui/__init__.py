@@ -153,6 +153,11 @@ class MainWindow(QMainWindow):
             self.system.set_termodat_is_active
         ######################
 
+        # RECIPE #############
+        self.system.set_current_recipe_step_action.connect(self.add_recipe_step)
+
+        ######################
+
     def on_create_recipe(self):
         try:
             self.table_widget.on_create_recipe()
@@ -194,7 +199,7 @@ class MainWindow(QMainWindow):
             # self.system.start_recipe()
             self.system.run_recipe()
             self._recipe_history = []
-            self.add_recipe_step("Инициализация рецепта")
+            self.add_recipe_step({'name': "Инициализация рецепта"})
             self.table_widget.on_close()
             self.main_interface_layout_widget.deactivate_interface()
             self.right_buttons_layout_widget.activate_manage_recipe_buttons()
@@ -202,7 +207,9 @@ class MainWindow(QMainWindow):
             self.system.add_error("Start recipe UI error:" + str(e))
             print("Start recipe UI error:", e)
 
-    def add_recipe_step(self, name="---", index=None):
+    def add_recipe_step(self, step: dict):  # name="---", index=None):
+        name = step.get('name', '-----')
+        index = step.get('index', None)
         index = index if index else len(self._recipe_history)
         if self._current_recipe_step:
             if self._current_recipe_step.get('index', -1) == index:
@@ -244,9 +251,10 @@ class MainWindow(QMainWindow):
         try:
             self.memory_snapshot()
             self.system.get_values()
-            recipe_step = self.system.current_recipe_step
-            if recipe_step:
-                self.add_recipe_step(**recipe_step)
+            # recipe_step = self.system.current_recipe_step
+            # if recipe_step:
+            #     last_recipe_steps = self.system.last_recipe_steps
+            #     self.add_recipe_step(**recipe_step)
             recipe_state = self.system.recipe_state
             if recipe_state != self._recipe_state:
                 self._recipe_state = recipe_state
