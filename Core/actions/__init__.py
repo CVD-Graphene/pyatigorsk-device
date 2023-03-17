@@ -207,22 +207,28 @@ class SmallPumpOutToPressureAction(AppAction):
     key = ACTIONS_NAMES.SMALL_PUMP_OUT_CAMERA
     args_info = [PositiveFloatKeyArgument, TimeEditArgument]
 
-    def action(self, target_pressure):
+    def action(self, target_pressure, max_time):
         target_pressure = float(target_pressure)
+        max_seconds = get_total_seconds_from_time_arg(max_time)
+
         index = settings.SMALL_PUMP_INDEX
-        self.system.change_pump_valve_opened(True, index)
+        self.system.change_pump_valve_opened(True, device_num=index)
 
         start_time = time.time()
 
         while self.system.get_current_vakumetr_pressure() >= target_pressure:
             if self.get_current_recipe_state() == RECIPE_STATES.STOP:
                 break  # TODO: Or return here?
-            time.sleep(1)
-            if MAX_RECIPE_STEP_SECONDS and (time.time() - start_time >= MAX_RECIPE_STEP_SECONDS):
+
+            delta_time = time.time() - start_time
+            if MAX_RECIPE_STEP_SECONDS and (delta_time >= MAX_RECIPE_STEP_SECONDS):
+                raise NotAchievingRecipeStepGoal
+
+            if delta_time >= max_seconds:
                 self.system.add_error_log(f"Откачка не завершилась до достижения максимального времени")
                 raise NotAchievingRecipeStepGoal
 
-        self.system.change_pump_valve_opened(False, index)
+        self.system.change_pump_valve_opened(False, device_num=index)
 
 
 class BigPumpOutToPressureAction(AppAction):
@@ -238,7 +244,7 @@ class BigPumpOutToPressureAction(AppAction):
         max_seconds = get_total_seconds_from_time_arg(max_time)
 
         index = settings.BIG_PUMP_INDEX
-        self.system.change_pump_valve_opened(True, index)
+        self.system.change_pump_valve_opened(True, device_num=index)
 
         start_time = time.time()
 
@@ -254,7 +260,7 @@ class BigPumpOutToPressureAction(AppAction):
                 self.system.add_error_log(f"Откачка не завершилась до достижения максимального времени")
                 raise NotAchievingRecipeStepGoal
 
-        self.system.change_pump_valve_opened(False, index)
+        self.system.change_pump_valve_opened(False, device_num=index)
 
 
 class OpenValveAction(AppAction):
