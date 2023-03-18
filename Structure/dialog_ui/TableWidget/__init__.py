@@ -450,7 +450,7 @@ class AppTableWidget(QWidget):
                     elif hasattr(it, 'currentText'):
                         row_arr.append(it.currentText())
                 arr.append(row_arr)
-            print("TABLE:", arr)
+            # print("TABLE:", arr)
             return arr
 
         except Exception as e:
