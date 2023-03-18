@@ -36,7 +36,8 @@ class PressureBlock(QWidget):
 
         for i, valve_config in enumerate(settings.VALVES_CONFIGURATION):
             gas = valve_config['NAME']
-            gas_widget = GasStateWidget(gas=gas, number=i)
+            max_sccm = valve_config.get('MAX_SCCM', settings.MAX_DEFAULT_SCCM_VALUE)
+            gas_widget = GasStateWidget(gas=gas, number=i, max_sccm=max_sccm)
             setattr(self, gas, gas_widget)
 
             gas_attr = getattr(self, gas)

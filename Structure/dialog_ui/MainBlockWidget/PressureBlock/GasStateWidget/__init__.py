@@ -9,11 +9,12 @@ from .styles import styles
 
 
 class GasStateWidget(QWidget):
-    def __init__(self, gas="O2", number=None):
+    def __init__(self, gas="O2", number=None, max_sccm=200.0):
         super().__init__()
 
         self.gas_name = gas
         self.number = number
+        self.max_sccm = max_sccm
         self._on_system_change_sccm = None
 
         self.line = QWidget(self)
@@ -49,7 +50,7 @@ class GasStateWidget(QWidget):
         self.input = QLineEdit()
         self.input.setStyleSheet(styles.input)
         # self.input.setMinimumWidth(1000)
-        self.input.setValidator(QDoubleValidator(0.0, 200.0, 1))
+        self.input.setValidator(QDoubleValidator(0.0, self.max_sccm, 1))
         self.input.setText("0")
         self.input.returnPressed.connect(self.on_update_input_sccm)
 
@@ -106,9 +107,13 @@ class GasStateWidget(QWidget):
 
     def on_update_input_sccm(self):
         input_sccm = self.input.text()
+        sccm = float(input_sccm)
+        print("INPUT SCCM:", sccm)
+        # if sccm > self.max_sccm:
+        #     sccm = self.max_sccm
+        #     self.draw_set_target_sccm(sccm)
         if self._on_system_change_sccm is not None:
-            print("INPUT SCCM:", input_sccm)
-            self._on_system_change_sccm(input_sccm, self.number)
+            self._on_system_change_sccm(sccm, self.number)
 
     def draw_set_target_sccm(self, sccm):
         self.input.setText(str(sccm))
