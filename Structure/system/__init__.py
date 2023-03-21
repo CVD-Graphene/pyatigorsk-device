@@ -29,7 +29,6 @@ LOCAL_MODE = settings.LOCAL_MODE
 
 
 class CvdSystem(BaseSystem):
-
     recipe_class = AppRecipeRunner
 
     def _determine_attributes(self):
@@ -61,15 +60,33 @@ class CvdSystem(BaseSystem):
                 controller.destructor()
                 del controller
 
-        print("|> FOUND PORTS:", self.vakumetr_port, self.rrg_port, self.termodat_port)
+        print(
+            "|> FOUND PORTS:",
+            "vakum:", self.vakumetr_port,
+            "rrg:", self.rrg_port,
+            "termodat:", self.termodat_port
+        )
         assert self.vakumetr_port is not None
         assert self.rrg_port is not None
         assert self.termodat_port is not None
+
+        self.ports = {
+            'vakumetr': self.vakumetr_port,
+            'rrg': self.rrg_port,
+            'termodat': self.termodat_port,
+        }
+
+        self._ports_attr_names = {
+            'vakumetr': 'vakumetr_port',
+            'rrg': 'rrg_port',
+            'termodat': 'termodat_port',
+        }
 
         gc.collect()
 
     def _init_controllers(self):
         self.accurate_vakumetr_controller = AccurateVakumetrController(
+            get_potential_port=self.get_potential_controller_port,
             port=self.vakumetr_port,
         )
 
@@ -89,11 +106,13 @@ class CvdSystem(BaseSystem):
 
         self.rrgs_controller = SeveralRrgModbusController(
             config=VALVES_CONFIGURATION,
+            get_potential_port=self.get_potential_controller_port,
             port=self.rrg_port,
         )
 
         self.termodats_controller = SeveralTermodatModbusController(
             config=TERMODAT_CONFIGURATION,
+            get_potential_port=self.get_potential_controller_port,
             port=self.termodat_port,
         )
 
@@ -108,6 +127,26 @@ class CvdSystem(BaseSystem):
             self._controllers.append(valve)
         for pump in self._pumps.values():
             self._controllers.append(pump)
+
+    def get_potential_controller_port(self, controller_port, controller_code):
+        new_port = controller_port
+        try:
+            used_ports = [value for key, value in self.ports.items() if key != controller_code]
+            usb_ports = get_available_usb_ports()
+            for used_port in used_ports:
+                try:
+                    usb_ports.remove(used_port)
+                except:
+                    continue
+
+            new_port = usb_ports[0]
+            setattr(self, self._ports_attr_names[controller_code], new_port)
+            self.ports[controller_code] = new_port
+        except Exception as e:
+            print("|<<< NEW PORT GET ERROR:", e)
+
+        print(f"\n|>>> NEW PORT FOR {controller_code}: {new_port}\n")
+        return new_port
 
     def _init_values(self):
         self.accurate_vakumetr_value = 0.0
