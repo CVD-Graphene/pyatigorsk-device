@@ -35,7 +35,7 @@ class LatexWidget(QtWidgets.QWidget):
                  parent=None,
                  rgb=None,
                  fon_size_mult=1.5,
-                 top_y=0.75,
+                 top_y=0.9,
                  ):
         super().__init__(parent)
         if rgb is None:
@@ -72,7 +72,7 @@ class LatexWidget(QtWidgets.QWidget):
 
         text = self._figure.suptitle(
             mathText,
-            x=0.1,
+            x=0.03,
             y=self.top_y,
             horizontalalignment='left',
             verticalalignment='top',
@@ -85,7 +85,7 @@ class LatexWidget(QtWidgets.QWidget):
         h = y1 - y0
 
         self._figure.set_size_inches(w / 80, h / 80)
-        self.setFixedSize(w, h)
+        self.setFixedSize(w, h * 1.1)
         self._canvas.draw()
         # self._figure.show()
 
