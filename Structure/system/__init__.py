@@ -36,16 +36,26 @@ class CvdSystem(BaseSystem):
         self.vakumetr_port = None
         self.rrg_port = None
         self.termodat_port = None
-        attributes = [
-            ['rrg_port', RrgModbusController],
-            ['termodat_port', TermodatModbusController],
-            ['vakumetr_port', AccurateVakumetrController],
-        ]
+        self._ports_attr_names = {
+            'vakumetr': 'vakumetr_port',
+            'rrg': 'rrg_port',
+            'termodat': 'termodat_port',
+        }
+        self._controllers_check_classes = {
+            'rrg': RrgModbusController,
+            'termodat': TermodatModbusController,
+            'vakumetr': AccurateVakumetrController,
+        }
+        # attributes = [
+        #     ['rrg_port', RrgModbusController],
+        #     ['termodat_port', TermodatModbusController],
+        #     ['vakumetr_port', AccurateVakumetrController],
+        # ]
         usb_ports = get_available_usb_ports()
         if LOCAL_MODE:
             usb_ports = ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']
         print("PORTS USB:", usb_ports)
-        for port_name, controller_class in attributes:
+        for controller_code, controller_class in self._controllers_check_classes.items():
             for port in usb_ports:  # ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']:
                 if port in used_ports:
                     continue
@@ -53,7 +63,7 @@ class CvdSystem(BaseSystem):
                 controller.setup()
                 is_good = controller.check_command()
                 if is_good:
-                    setattr(self, port_name, port)
+                    setattr(self, self._ports_attr_names[controller_code], port)
                     used_ports.append(port)
                     break
 
@@ -62,7 +72,7 @@ class CvdSystem(BaseSystem):
 
         print(
             "|> FOUND PORTS:",
-            "vakum:", self.vakumetr_port,
+            "vakumetr:", self.vakumetr_port,
             "rrg:", self.rrg_port,
             "termodat:", self.termodat_port
         )
@@ -74,12 +84,6 @@ class CvdSystem(BaseSystem):
             'vakumetr': self.vakumetr_port,
             'rrg': self.rrg_port,
             'termodat': self.termodat_port,
-        }
-
-        self._ports_attr_names = {
-            'vakumetr': 'vakumetr_port',
-            'rrg': 'rrg_port',
-            'termodat': 'termodat_port',
         }
 
         gc.collect()
@@ -139,9 +143,26 @@ class CvdSystem(BaseSystem):
                 except:
                     continue
 
-            new_port = usb_ports[0]
-            setattr(self, self._ports_attr_names[controller_code], new_port)
-            self.ports[controller_code] = new_port
+            controller_check_class = self._controllers_check_classes[controller_code]
+            for port in usb_ports:
+                controller: AbstractController = controller_check_class(port=port)
+                controller.setup()
+
+                if controller.check_command():
+                    new_port = port
+                    setattr(self, self._ports_attr_names[controller_code], new_port)
+                    self.ports[controller_code] = new_port
+
+                    controller.destructor()
+                    del controller
+                    break
+
+                controller.destructor()
+                del controller
+
+            # new_port = usb_ports[0]
+            # setattr(self, self._ports_attr_names[controller_code], new_port)
+            # self.ports[controller_code] = new_port
         except Exception as e:
             print("|<<< NEW PORT GET ERROR:", e)
 
