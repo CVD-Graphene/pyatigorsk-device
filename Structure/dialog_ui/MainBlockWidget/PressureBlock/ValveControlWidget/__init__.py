@@ -5,7 +5,8 @@ from PyQt5.QtGui import QPainterPath, QColor, QPainter
 from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, \
     QVBoxLayout, QLineEdit, QHBoxLayout, QLabel
 
-from Structure.dialog_ui.components.butterfly_button import ButterflyButton
+# from Structure.dialog_ui.components.butterfly_button import ButterflyButton
+from grapheneqtui.components import ButterflyButton
 from .styles import styles, button_style, button_style1
 
 PUMPS_CONFIGURATION = settings.PUMPS_CONFIGURATION
