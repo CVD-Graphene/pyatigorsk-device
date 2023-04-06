@@ -1,10 +1,7 @@
-import math
-from random import randint
-
 from coregraphene.conf import settings
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, QVBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QWidget, QVBoxLayout
 
 from .GasStateWidget import GasStateWidget, AirStateWidget
 from .ValveControlWidget import ValveControlWidget
@@ -23,9 +20,6 @@ class PressureBlock(QWidget):
         self.setContentsMargins(0, 0, 0, 0)
         self.setAttribute(QtCore.Qt.WA_StyledBackground, True)
 
-        # self.line = QLineEdit()
-        # self.layout.addWidget(self.line)
-
         self.control_valve = ValveControlWidget()
         self.layout.addWidget(self.control_valve)
 
@@ -43,30 +37,6 @@ class PressureBlock(QWidget):
             gas_attr = getattr(self, gas)
             self.layout.addWidget(gas_attr)
             self.gases.append(gas_attr)
-
-        # self.o2 = GasStateWidget(gas="O_2")
-        # self.layout.addWidget(self.o2,)
-        #
-        # self.n2 = GasStateWidget(gas="N_2")
-        # self.layout.addWidget(self.n2,)
-        #
-        # self.ar = GasStateWidget(gas="Ar")
-        # self.layout.addWidget(self.ar,)
-        #
-        # self.c2 = GasStateWidget(gas="C_2")
-        # self.layout.addWidget(self.c2,)
-        #
-        # self.f2 = GasStateWidget(gas="F_2")
-        # self.layout.addWidget(self.f2,)
-
-        # need to connect functions in system
-        # self.gases = [
-        #     self.o2,
-        #     self.n2,
-        #     self.ar,
-        #     self.c2,
-        #     self.f2,
-        # ]
 
     def draw_set_gas_target_sccm(self, sccm, gas_num):
         self.gases[gas_num].draw_set_target_sccm(sccm)

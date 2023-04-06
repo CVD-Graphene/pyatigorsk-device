@@ -1,21 +1,15 @@
 import datetime
-import gc
-import logging
-import tracemalloc
-from time import sleep
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QThreadPool
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
-    QFrame, QPushButton, QLabel, QHBoxLayout, QVBoxLayout,
-    QLineEdit, QWidget, QMainWindow, QGridLayout, QFileDialog,
+    QHBoxLayout, QWidget, QMainWindow, QFileDialog,
 )
 
-from Structure.dialog_ui.MainBlockWidget import MainBlockWidget
-from Structure.dialog_ui.RightButtonsWidget import RightButtonsWidget
-from Structure.dialog_ui.TableWidget import AppTableWidget
+from coregraphene.conf import settings
+from .MainBlockWidget import MainBlockWidget
 from Structure.system import CvdSystem
 from grapheneqtui.components import LogWidget
+from grapheneqtui.structures import RightButtonsWidget, RecipeTableWidget
 
 from coregraphene.constants import RECIPE_STATES, NOTIFICATIONS
 from Core.actions import ACTIONS
@@ -65,6 +59,7 @@ class MainWindow(QMainWindow):
             on_stop_recipe=self.system.on_stop_recipe,
             on_pause_recipe=self.system.on_pause_recipe,
             on_get_recipe_state=self.system.get_recipe_state,
+            recipe_states=RECIPE_STATES,
         )
         self.main_window.addWidget(self.right_buttons_layout_widget)
 
@@ -76,12 +71,13 @@ class MainWindow(QMainWindow):
         self.timer.start(500)
 
         # TABLE WIDGET FOR RECIPE ###################################
-        self.table_widget = AppTableWidget(
+        self.table_widget = RecipeTableWidget(
             parent=self,
             actions_list=ACTIONS,
             save_recipe_file=self.system.save_recipe_file,
             get_recipe_file_data=self.system.get_recipe_file_data,
             start_recipe=self.start_recipe,
+            column_names=settings.TABLE_COLUMN_NAMES,
         )
 
         # LOG NOTIFICATION WIDGET ###################################
@@ -116,7 +112,7 @@ class MainWindow(QMainWindow):
             self.system.get_current_rrg_sccm.connect(gas.update_current_sccm_label, device_num=gas.number)
 
         # AIR #################
-        self.milw.pressure_block.air.\
+        self.milw.pressure_block.air. \
             connect_valve_function(self.system.change_air_valve_state)
         self.system.change_air_valve_opened.connect(self.milw.pressure_block.air.draw_is_open)
         #######################
@@ -277,7 +273,7 @@ class MainWindow(QMainWindow):
             print("ERROR [get_values_and_log_state]:", e)
         finally:
             try:
-            # print("FINALLY:", self.log, "| has logs:",  self.system.has_logs)
+                # print("FINALLY:", self.log, "| has logs:",  self.system.has_logs)
                 if self.log is None and self.system.has_logs:
                     self.log = self.system.first_log
                     self.log_widget.set_log(self.log)
