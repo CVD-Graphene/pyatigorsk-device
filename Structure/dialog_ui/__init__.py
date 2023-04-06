@@ -14,10 +14,10 @@ from PyQt5.QtWidgets import (
 from Structure.dialog_ui.MainBlockWidget import MainBlockWidget
 from Structure.dialog_ui.RightButtonsWidget import RightButtonsWidget
 from Structure.dialog_ui.TableWidget import AppTableWidget
-from Structure.dialog_ui.components import LogWidget
 from Structure.system import CvdSystem
+from grapheneqtui.components import LogWidget
 
-from coregraphene.constants import RECIPE_STATES
+from coregraphene.constants import RECIPE_STATES, NOTIFICATIONS
 from Core.actions import ACTIONS
 
 RECIPE_STATES_TO_STR = {
@@ -86,7 +86,11 @@ class MainWindow(QMainWindow):
 
         # LOG NOTIFICATION WIDGET ###################################
         self.log = None
-        self.log_widget = LogWidget(on_close=self.clear_log, parent=self)
+        self.log_widget = LogWidget(
+            on_close=self.clear_log,
+            parent=self,
+            notification_types=NOTIFICATIONS,
+        )
         self.log_widget.move(100, 100)
 
         # return

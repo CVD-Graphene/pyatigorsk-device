@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QVBoxLayout, QHBoxLayo
 from .CurrentSettingsBlock import CurrentSettingsBlock
 from .FlowControlWidget import FlowControlWidget
 from .SetTemperatureBlock import SetTemperatureBlock
-from .ShowPressureBlock import ShowPressureBlock
+from grapheneqtui.components import ShowPressureBlock
 from .styles import styles
 
 

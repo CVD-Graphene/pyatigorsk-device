@@ -1,11 +1,11 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, QLabel, QHBoxLayout, QLineEdit
 
-from Structure.dialog_ui.components import ParameterLatexLabel, LatexWidget
-from Structure.dialog_ui.constants import SHADOW_BLUR_RADIUS
+from grapheneqtui.components import LatexWidget
 from .styles import styles
 
 RGB = [175, 175, 250]
+
 
 class RiseCurrentBlock(QWidget):
     def __init__(self, parent=None):

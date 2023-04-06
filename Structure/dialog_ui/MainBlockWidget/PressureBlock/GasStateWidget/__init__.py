@@ -3,8 +3,7 @@ from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QPushButton, QWidget, QGridLayout, \
     QVBoxLayout, QLineEdit, QHBoxLayout, QLabel
 
-from Structure.dialog_ui.components import ParameterLatexLabel, LatexWidget
-from grapheneqtui.components import ButterflyButton
+from grapheneqtui.components import ButterflyButton, LatexWidget
 from .styles import styles
 
 

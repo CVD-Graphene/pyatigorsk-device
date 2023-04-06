@@ -2,7 +2,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 
 from Structure.dialog_ui.MainBlockWidget.TemperatureBlock.FlowControlWidget import FlowControlWidget
-from Structure.dialog_ui.MainBlockWidget.TemperatureBlock.ShowPressureBlock import ShowPressureBlock
+from grapheneqtui.components import ShowPressureBlock
 from .styles import styles
 
 
