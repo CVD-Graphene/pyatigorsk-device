@@ -1,24 +1,16 @@
 import datetime
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import (
-    QHBoxLayout, QWidget, QMainWindow, QFileDialog,
-)
+from PyQt5.QtWidgets import QHBoxLayout, QWidget, QMainWindow, QFileDialog
 
+from Core.actions import ACTIONS
 from coregraphene.conf import settings
-from .MainBlockWidget import MainBlockWidget
-from Structure.system import CvdSystem
+from coregraphene.constants import RECIPE_STATES, NOTIFICATIONS, RECIPE_STATES_TO_STR
 from grapheneqtui.components import LogWidget
 from grapheneqtui.structures import RightButtonsWidget, RecipeTableWidget
+from Structure.system import CvdSystem
 
-from coregraphene.constants import RECIPE_STATES, NOTIFICATIONS
-from Core.actions import ACTIONS
-
-RECIPE_STATES_TO_STR = {
-    RECIPE_STATES.RUN: "Running",
-    RECIPE_STATES.PAUSE: "Pause",
-    RECIPE_STATES.STOP: "Stop",
-}
+from .MainBlockWidget import MainBlockWidget
 
 
 class MainWindow(QMainWindow):
