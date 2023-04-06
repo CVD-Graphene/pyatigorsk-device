@@ -1,12 +1,11 @@
 from coregraphene.conf import settings
+from grapheneqtui.components import ShowPressureBlock, TermodatTemperatureBlock
 
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QLabel, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 
 from .CurrentSettingsBlock import CurrentSettingsBlock
 from .FlowControlWidget import FlowControlWidget
-from .SetTemperatureBlock import SetTemperatureBlock
-from grapheneqtui.components import ShowPressureBlock
 from .styles import styles
 
 
@@ -34,14 +33,18 @@ class TemperatureBlock(QWidget):
 
         self.temps = dict()
         for num, _ in enumerate(settings.TERMODAT_CONFIGURATION):
-            t_obj = SetTemperatureBlock(num)
+            t_obj = TermodatTemperatureBlock(
+                num,
+                max_speed=settings.TERMODAT_MAX_SPEED,
+                default_speed=settings.TERMODAT_DEFAULT_SPEED,
+            )
             self.temps[num] = t_obj
 
             t_obj.system_set_temperature = self._on_set_temperature
             t_obj.system_set_speed = self._on_set_speed
             t_obj.system_set_active_regulation = self._on_set_active_regulation
 
-        # self.set_temperature = SetTemperatureBlock()
+        # self.set_temperature = TermodatTemperatureBlock(...args!)
         # self.layout.addWidget(self.set_temperature, QtCore.Qt.AlignTop)
 
         for k, v in self.temps.items():
