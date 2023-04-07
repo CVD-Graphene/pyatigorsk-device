@@ -4,11 +4,11 @@ from PyQt5 import QtGui
 
 os.environ.setdefault('GRAPHENE_SETTINGS_MODULE', 'Core.settings')
 
-from Structure.system import CvdSystem
+from Structure.system import AppSystem
 
 
 def test_init_local():
-    system = CvdSystem(actions_list=[])
+    system = AppSystem(actions_list=[])
 
 
 def test_call_class():

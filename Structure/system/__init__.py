@@ -28,7 +28,7 @@ TERMODAT_CONFIGURATION = settings.TERMODAT_CONFIGURATION
 LOCAL_MODE = settings.LOCAL_MODE
 
 
-class CvdSystem(BaseSystem):
+class AppSystem(BaseSystem):
     recipe_class = AppRecipeRunner
 
     def _determine_attributes(self):

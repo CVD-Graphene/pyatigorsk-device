@@ -1,8 +1,8 @@
-from Structure.system import CvdSystem
+from Structure.system import AppSystem
 
 
 def test_init_local():
-    system = CvdSystem()
+    system = AppSystem()
 
 
 if __name__ == '__main__':
