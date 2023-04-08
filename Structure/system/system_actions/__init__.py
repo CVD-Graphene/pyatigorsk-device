@@ -44,13 +44,6 @@ class ChangeGasValveStateAction(ManyDeviceSystemAction):
     #     # print("Valve state arr...", arr, 'dev', device_num)
     #     return arr
 
-
-class SingleAnswerSystemAction(ManyDeviceSystemAction):
-    def _call_function(self, value, device_num=None):
-        # print("CALL FUNC CURRENT FLOW:", value, device_num)
-        return value
-
-
 class TurnOnAllTermodatsRegulationAction(SystemAction):
     def _call_function(self):
         return self._system.termodats_controller.turn_on_all_termodats_regulation()
