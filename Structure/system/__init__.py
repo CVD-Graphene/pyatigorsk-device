@@ -91,6 +91,7 @@ class AppSystem(BaseSystem):
     def _init_controllers(self):
         self.accurate_vakumetr_controller = AccurateVakumetrController(
             get_potential_port=self.get_potential_controller_port,
+            port_communicator=settings.ACCURATE_VAKUMETR_COMMUNICATOR_PORT,
             port=self.vakumetr_port,
         )
 
