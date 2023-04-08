@@ -132,42 +132,42 @@ class AppSystem(BaseSystem):
         for pump in self._pumps.values():
             self._controllers.append(pump)
 
-    def get_potential_controller_port(self, controller_port, controller_code):
-        new_port = controller_port
-        try:
-            used_ports = [value for key, value in self.ports.items() if key != controller_code]
-            usb_ports = get_available_usb_ports()
-            for used_port in used_ports:
-                try:
-                    usb_ports.remove(used_port)
-                except:
-                    continue
-
-            controller_check_class = self._controllers_check_classes[controller_code]
-            for port in usb_ports:
-                controller: AbstractController = controller_check_class(port=port)
-                controller.setup()
-
-                if controller.check_command():
-                    new_port = port
-                    setattr(self, self._ports_attr_names[controller_code], new_port)
-                    self.ports[controller_code] = new_port
-
-                    controller.destructor()
-                    del controller
-                    break
-
-                controller.destructor()
-                del controller
-
-            # new_port = usb_ports[0]
-            # setattr(self, self._ports_attr_names[controller_code], new_port)
-            # self.ports[controller_code] = new_port
-        except Exception as e:
-            print("|<<< NEW PORT GET ERROR:", e)
-
-        print(f"\n|>>> NEW PORT FOR {controller_code}: {new_port}\n")
-        return new_port
+    # def get_potential_controller_port(self, controller_port, controller_code):
+    #     new_port = controller_port
+    #     try:
+    #         used_ports = [value for key, value in self.ports.items() if key != controller_code]
+    #         usb_ports = get_available_usb_ports()
+    #         for used_port in used_ports:
+    #             try:
+    #                 usb_ports.remove(used_port)
+    #             except:
+    #                 continue
+    #
+    #         controller_check_class = self._controllers_check_classes[controller_code]
+    #         for port in usb_ports:
+    #             controller: AbstractController = controller_check_class(port=port)
+    #             controller.setup()
+    #
+    #             if controller.check_command():
+    #                 new_port = port
+    #                 setattr(self, self._ports_attr_names[controller_code], new_port)
+    #                 self.ports[controller_code] = new_port
+    #
+    #                 controller.destructor()
+    #                 del controller
+    #                 break
+    #
+    #             controller.destructor()
+    #             del controller
+    #
+    #         # new_port = usb_ports[0]
+    #         # setattr(self, self._ports_attr_names[controller_code], new_port)
+    #         # self.ports[controller_code] = new_port
+    #     except Exception as e:
+    #         print("|<<< NEW PORT GET ERROR:", e)
+    #
+    #     print(f"\n|>>> NEW PORT FOR {controller_code}: {new_port}\n")
+    #     return new_port
 
     def _init_values(self):
         self.accurate_vakumetr_value = 0.0
