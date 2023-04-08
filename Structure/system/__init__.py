@@ -5,8 +5,12 @@ from Structure.system.system_actions import (
     SetTargetRrgSccmAction,
     FullCloseRrgAction,
     FullOpenRrgAction,
-    SingleAnswerSystemAction, ChangeGasValveStateAction, ChangeAirValveStateAction, ChangePumpValveStateAction,
-    TurnOnAllTermodatsRegulationAction, TurnOffAllTermodatsRegulationAction, SetTemperatureAndSpeedAllTermodatsAction,
+    ChangeGasValveStateAction,
+    ChangeAirValveStateAction,
+    ChangePumpValveStateAction,
+    TurnOnAllTermodatsRegulationAction,
+    TurnOffAllTermodatsRegulationAction,
+    SetTemperatureAndSpeedAllTermodatsAction,
     SetTemperatureAllTermodatsAction,
 )
 from coregraphene.components.controllers import (
@@ -20,6 +24,7 @@ from coregraphene.components.controllers import (
 )
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
+from coregraphene.system_actions import SingleAnswerSystemAction
 from coregraphene.utils import get_available_usb_ports
 
 VALVES_CONFIGURATION = settings.VALVES_CONFIGURATION
