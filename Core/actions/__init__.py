@@ -3,7 +3,6 @@ import time
 from coregraphene.auto_actions import AppAction, IntKeyArgument, Argument, PositiveIntKeyArgument, \
     TimeEditArgument, GasListArgument, SccmArgument, ValveListArgument, PositiveFloatKeyArgument
 from coregraphene.conf import settings
-from coregraphene.constants import RECIPE_STATES
 from coregraphene.recipe.exceptions import NotAchievingRecipeStepGoal
 
 ACTIONS_NAMES = settings.ACTIONS_NAMES
@@ -60,7 +59,7 @@ class PauseAction(AppAction):
         start = time.time()
         while time.time() - start < seconds:
             time.sleep(1)
-            if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            if self._is_stop_state():
                 break
 
 
@@ -170,7 +169,7 @@ class SetRrgSccmAndKeepToPressureDeltaAction(AppAction):
         start_time = time.time()
         start_pressure = self.system.get_current_vakumetr_pressure()
         while self.system.get_current_vakumetr_pressure() - start_pressure < delta_pressure:
-            if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            if self._is_stop_state():
                 break  # TODO: Or return here?
             time.sleep(1)
             if MAX_RECIPE_STEP_SECONDS and (time.time() - start_time >= MAX_RECIPE_STEP_SECONDS):
@@ -217,7 +216,8 @@ class SmallPumpOutToPressureAction(AppAction):
         start_time = time.time()
 
         while self.system.get_current_vakumetr_pressure() >= target_pressure:
-            if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            # if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            if self._is_stop_state():
                 break  # TODO: Or return here?
 
             delta_time = time.time() - start_time
@@ -249,7 +249,7 @@ class BigPumpOutToPressureAction(AppAction):
         start_time = time.time()
 
         while self.system.get_current_vakumetr_pressure() > target_pressure:
-            if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            if self._is_stop_state():
                 break  # TODO: Or return here?
             time.sleep(1)
             delta_time = time.time() - start_time
@@ -353,7 +353,7 @@ class VentilateCameraTableAction(AppAction):
 
         # 4 STEP
         while self.system.get_max_current_termodat_temperature() > target_temperature:
-            if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            if self._is_stop_state():
                 return  # TODO: Or break here?
 
             time.sleep(1)
@@ -377,7 +377,7 @@ class VentilateCameraTableAction(AppAction):
             if (max_p / min_p - 1.0) * 100 <= x:
                 break
 
-            if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            if self._is_stop_state():
                 break  # TODO: Or return here?
 
             delta_time = time.time() - start_time
@@ -414,7 +414,7 @@ class WaitForTemperatureAllTermodatsAction(AppAction):
 
         # 4 STEP
         while self.system.get_min_current_termodat_temperature() < target_temperature:
-            if self.get_current_recipe_state() == RECIPE_STATES.STOP:
+            if self._is_stop_state():
                 return  # TODO: Or break here?
 
             time.sleep(1)
