@@ -50,9 +50,6 @@ class PauseAction(AppAction):
     key = ACTIONS_NAMES.PAUSE
     args_info = [TimeEditArgument]
 
-    def set_functions(self, get_current_recipe_state=None, **kwargs):
-        self.get_current_recipe_state = get_current_recipe_state
-
     def action(self, sleep_time, *args, **kwargs):
         seconds = get_total_seconds_from_time_arg(sleep_time)
         # print("SLEEP SECONDS:", seconds, time.time())
@@ -194,7 +191,7 @@ class SetRrgSccmValueWithPauseAction(AppAction):
         action_rrg.action(valve_name, sccm)
 
         action_pause = PauseAction()
-        action_pause.set_functions(get_current_recipe_state=self.get_current_recipe_state)
+        action_pause.system = self.system
         action_pause.action(time_pause)
 
 
