@@ -10,7 +10,13 @@ AIR_VALVE_CONFIGURATION = {
 AIR_VALVE_NAME = AIR_VALVE_CONFIGURATION['NAME']
 
 VALVES_CONFIGURATION = [
-    {'PORT': 2, "NAME": "H_2", "IS_GAS": True, "MAX_SCCM": 606.0, "INSTRUMENT_NUMBER": 2},
+    {
+        'PORT': 2,  # gpio port for rele
+        "NAME": "H_2",
+        "IS_GAS": True,
+        "MAX_SCCM": 606.0,  # max sccm for rrg, if not provided == `MAX_DEFAULT_SCCM_VALUE`
+        "INSTRUMENT_NUMBER": 2  # rrg modbus instrument number
+    },
     {'PORT': 17, "NAME": "CH_4", "IS_GAS": True, "MAX_SCCM": 43.2, "INSTRUMENT_NUMBER": 1},
     {'PORT': 3, "NAME": "Ar", "IS_GAS": True, "MAX_SCCM": 2175, "INSTRUMENT_NUMBER": 3},
 ]
