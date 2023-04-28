@@ -3,6 +3,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
 
 from grapheneqtui.components import ButterflyButton, PumpButton
+from grapheneqtui.constants import BUTTERFLY_BUTTON_STATE
 from grapheneqtui.utils import StyleSheet
 
 styles = StyleSheet({
@@ -51,11 +52,15 @@ class PumpsControlWidget(QWidget):
         # self.layout.addWidget(self.b, stretch=4, alignment=QtCore.Qt.AlignHCenter,)
         self.layout.addLayout(self.valves_layout)
 
-    def draw_big_pump_is_open(self, is_open):
-        self.big_pump.update_active(is_open)
+    def draw_big_pump_is_open(self, is_open: bool):
+        state = BUTTERFLY_BUTTON_STATE.OPEN if is_open else BUTTERFLY_BUTTON_STATE.CLOSE
+        self.big_pump.update_state_signal.emit(state)
+        # self.big_pump.update_active(is_open)
 
-    def draw_small_pump_is_open(self, is_open):
-        self.small_pump.update_active(is_open)
+    def draw_small_pump_is_open(self, is_open: bool):
+        state = BUTTERFLY_BUTTON_STATE.OPEN if is_open else BUTTERFLY_BUTTON_STATE.CLOSE
+        self.small_pump.update_state_signal.emit(state)
+        # self.small_pump.update_active(is_open)
 
     def connect_big_pump_valve_function(self, func):
         def on_click():

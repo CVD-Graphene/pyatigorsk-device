@@ -199,11 +199,13 @@ class AppSystem(BaseSystem):
         valve = self._valves.get(gas_num, None)
         if valve is None:
             return False
-        return self._change_valve_state(valve, gas_num)
+        new_state = self._change_valve_state(valve, gas_num)
+        self.change_gas_valve_opened(new_state, device_num=gas_num)
 
     @BaseSystem.action
     def change_air_valve_state(self):
-        return self._change_valve_state(self.air_valve_controller, "AIR")
+        new_state = self._change_valve_state(self.air_valve_controller, "AIR")
+        self.change_air_valve_opened(new_state)
 
     @BaseSystem.action
     def change_pump_valve_state(self, pump_num):
