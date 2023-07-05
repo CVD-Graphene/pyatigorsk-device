@@ -2,8 +2,8 @@ from coregraphene.conf import settings
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
 
-from grapheneqtui.components import ButterflyButton, PumpButton
-from grapheneqtui.constants import BUTTERFLY_BUTTON_STATE
+from grapheneqtui.components import ButterflyButton, PumpButton, NeedleButterflyButton
+from grapheneqtui.constants import BUTTERFLY_BUTTON_STATE, PUMP_BUTTON_STATE
 from grapheneqtui.utils import StyleSheet
 
 styles = StyleSheet({
@@ -29,7 +29,7 @@ class PumpsControlWidget(QWidget):
         self.setObjectName("valve_control_widget")
         self.setAttribute(QtCore.Qt.WA_StyledBackground, True)
 
-        self.button = PumpButton()
+        self.button = PumpButton(PUMP_BUTTON_STATE.INACTIVE)
 
         self.big_pump = ButterflyButton()
         self.small_pump = ButterflyButton()
@@ -39,7 +39,7 @@ class PumpsControlWidget(QWidget):
             self.big_pump, alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignHCenter)
 
         self.small_pump_layout = QHBoxLayout()
-        self.small_pump_label = QLabel('small pump')
+        self.small_pump_label = NeedleButterflyButton()  # QLabel('small pump')
         self.small_pump_layout.addWidget(
             self.small_pump_label, alignment=QtCore.Qt.AlignLeft | QtCore.Qt.AlignHCenter)
         self.small_pump_layout.addWidget(
