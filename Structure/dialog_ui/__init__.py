@@ -91,7 +91,10 @@ class AppMainDialogWindow(BaseMainDialogWindow):
         ######################
 
     def _update_ui_values(self):
-        self.milw.temperature_block.show_pressure_block.set_value(
+        # self.milw.temperature_block.show_pressure_block.set_value(
+        #     self.system.accurate_vakumetr_value
+        # )
+        self.milw.temperature_block.show_pressure_block.update_pressure_signal.emit(
             self.system.accurate_vakumetr_value
         )
 
@@ -99,6 +102,9 @@ class AppMainDialogWindow(BaseMainDialogWindow):
         #     gas.update_current_sccm_label(self.system.current_sccms[i])
 
         for num, temperature in self.system.current_temperatures.items():
-            self.milw.temperature_block.temps[num].set_current_temperature(
+            # self.milw.temperature_block.temps[num].set_current_temperature(
+            #     temperature
+            # )
+            self.milw.temperature_block.temps[num].current_temperature_effect(
                 temperature
             )

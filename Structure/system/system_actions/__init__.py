@@ -1,38 +1,38 @@
 from coregraphene.conf import settings
-from coregraphene.system_actions import (
-    ManyDeviceSystemAction, ManyDeviceControllerAction,
-    SystemAction,
+from coregraphene.system_effects import (
+    ManyDeviceSystemEffect, ManyDeviceControllerEffect,
+    SystemEffect,
 )
 
 LOCAL_MODE = settings.LOCAL_MODE
 
 
-class SetTargetRrgSccmAction(ManyDeviceSystemAction):
+class SetTargetRrgSccmAction(ManyDeviceSystemEffect):
     def _call_function(self, sccm, device_num):
         return self._system.rrgs_controller.set_target_sccm(sccm, device_num)
 
 
-class FullCloseRrgAction(ManyDeviceSystemAction):
+class FullCloseRrgAction(ManyDeviceSystemEffect):
     def _call_function(self, device_num):
         return self._system.rrgs_controller.full_close(device_num)
 
 
-class FullOpenRrgAction(ManyDeviceSystemAction):
+class FullOpenRrgAction(ManyDeviceSystemEffect):
     def _call_function(self, device_num):
         return self._system.rrgs_controller.full_open(device_num)
 
 
-class ChangeAirValveStateAction(SystemAction):
+class ChangeAirValveStateAction(SystemEffect):
     def _call_function(self, is_open):
         return self._system.air_valve_controller.set_is_open_state(is_open)
 
 
-class ChangePumpValveStateAction(ManyDeviceSystemAction):
+class ChangePumpValveStateAction(ManyDeviceSystemEffect):
     def _call_function(self, is_open, device_num=None):
         return self._system._pumps[device_num].set_is_open_state(is_open)
 
 
-class ChangeGasValveStateAction(ManyDeviceSystemAction):
+class ChangeGasValveStateAction(ManyDeviceSystemEffect):
     def _call_function(self, is_open, device_num=None):
         # print("Valve call...", is_open, device_num)
         ans = self._system._valves[device_num].set_is_open_state(is_open)
@@ -44,24 +44,25 @@ class ChangeGasValveStateAction(ManyDeviceSystemAction):
     #     # print("Valve state arr...", arr, 'dev', device_num)
     #     return arr
 
-class TurnOnAllTermodatsRegulationAction(SystemAction):
+
+class TurnOnAllTermodatsRegulationAction(SystemEffect):
     def _call_function(self):
         return self._system.termodats_controller.turn_on_all_termodats_regulation()
 
 
-class TurnOffAllTermodatsRegulationAction(SystemAction):
+class TurnOffAllTermodatsRegulationAction(SystemEffect):
     def _call_function(self):
         return self._system.termodats_controller.turn_off_all_termodats_regulation()
 
 
-class SetTemperatureAndSpeedAllTermodatsAction(SystemAction):
+class SetTemperatureAndSpeedAllTermodatsAction(SystemEffect):
     def _call_function(self, temperature, speed):
         return self._system.termodats_controller.set_temperature_and_speed_all_termodats(
             temperature, speed
         )
 
 
-class SetTemperatureAllTermodatsAction(SystemAction):
+class SetTemperatureAllTermodatsAction(SystemEffect):
     def _call_function(self, temperature):
         return self._system.termodats_controller.set_temperature_all_termodats(temperature)
 
@@ -69,7 +70,7 @@ class SetTemperatureAllTermodatsAction(SystemAction):
 # =========== CONTROLLER ACTIONS ================= #
 
 
-# class GetCurrentFlowRrgControllerAction(ManyDeviceControllerAction):
+# class GetCurrentFlowRrgControllerAction(ManyDeviceControllerEffect):
 #
 #     def _on_get_value(self, value):
 #         # print("CALL FUNC CURRENT FLOW CONTROLLER 2:", value)

@@ -24,7 +24,7 @@ from coregraphene.components.controllers import (
 )
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
-from coregraphene.system_actions import SingleAnswerSystemAction
+from coregraphene.system_effects import SingleAnswerSystemEffect
 from coregraphene.utils import get_available_usb_ports
 
 VALVES_CONFIGURATION = settings.VALVES_CONFIGURATION
@@ -166,7 +166,7 @@ class AppSystem(BaseSystem):
         self.full_close_rrg_action = FullCloseRrgAction(system=self)
         self.full_open_rrg_action = FullOpenRrgAction(system=self)
 
-        self.get_current_rrg_sccm = SingleAnswerSystemAction(system=self)
+        self.get_current_rrg_sccm = SingleAnswerSystemEffect(system=self)
         self.rrgs_controller.get_current_flow.connect(self.get_current_rrg_sccm)
 
         # ===== Valves ===== #
