@@ -20,7 +20,7 @@ from coregraphene.components.controllers import (
     RrgModbusController,
     TermodatModbusController,
     SeveralTermodatModbusController,
-    SeveralRrgModbusController,
+    SeveralRrgModbusController, DigitalFuseController,
 )
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
@@ -36,6 +36,13 @@ LOCAL_MODE = settings.LOCAL_MODE
 class AppSystem(BaseSystem):
     recipe_class = AppRecipeRunner
 
+    _default_controllers_kwargs = {
+        'vakumetr': {
+            'port_communicator': settings.ACCURATE_VAKUMETR_COMMUNICATOR_PORT,
+            # 'baudrate': settings.ACCURATE_VAKUMETR_BAUDRATE,
+        },
+    }
+
     def _determine_attributes(self):
         used_ports = []
         self.vakumetr_port = None
@@ -50,11 +57,6 @@ class AppSystem(BaseSystem):
             'rrg': RrgModbusController,
             'termodat': TermodatModbusController,
             'vakumetr': AccurateVakumetrController,
-        }
-        self._default_controllers_kwargs = {
-            'vakumetr': {
-                'port_communicator': settings.ACCURATE_VAKUMETR_COMMUNICATOR_PORT,
-            },
         }
         # attributes = [
         #     ['rrg_port', RrgModbusController],
@@ -104,7 +106,8 @@ class AppSystem(BaseSystem):
     def _init_controllers(self):
         self.accurate_vakumetr_controller = AccurateVakumetrController(
             get_potential_port=self.get_potential_controller_port,
-            port_communicator=settings.ACCURATE_VAKUMETR_COMMUNICATOR_PORT,
+            # port_communicator=settings.ACCURATE_VAKUMETR_COMMUNICATOR_PORT,
+            **self._default_controllers_kwargs.get('vakumetr'),
             port=self.vakumetr_port,
         )
 
@@ -134,6 +137,10 @@ class AppSystem(BaseSystem):
             port=self.termodat_port,
         )
 
+        self._digital_fuses = {}
+        for i, port in enumerate(settings.DIGITAL_FUSE_PORTS):
+            self._digital_fuses[i] = DigitalFuseController(port=port)
+
         self._controllers: list[AbstractController] = [
             self.accurate_vakumetr_controller,
             self.rrgs_controller,
@@ -145,6 +152,9 @@ class AppSystem(BaseSystem):
             self._controllers.append(valve)
         for pump in self._pumps.values():
             self._controllers.append(pump)
+
+        for fuse in self._digital_fuses.values():
+            self._controllers.append(fuse)
 
     def _init_values(self):
         self.accurate_vakumetr_value = 0.0
