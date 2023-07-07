@@ -20,7 +20,7 @@ from coregraphene.components.controllers import (
     RrgModbusController,
     TermodatModbusController,
     SeveralTermodatModbusController,
-    SeveralRrgModbusController, DigitalFuseController,
+    SeveralRrgModbusController, DigitalFuseController, VakumetrAdcController,
 )
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
@@ -137,12 +137,20 @@ class AppSystem(BaseSystem):
             port=self.termodat_port,
         )
 
+        self.gases_pressure_controller = VakumetrAdcController(
+            config=VALVES_CONFIGURATION,
+            channel=settings.VAKUMETR_SPI_READ_CHANNEL,
+            speed=settings.VAKUMETR_SPI_SPEED,
+            device=settings.VAKUMETR_SPI_READ_DEVICE,
+        )
+
         self._digital_fuses = {}
         for i, port in enumerate(settings.DIGITAL_FUSE_PORTS):
             self._digital_fuses[i] = DigitalFuseController(port=port)
 
         self._controllers: list[AbstractController] = [
             self.accurate_vakumetr_controller,
+            self.gases_pressure_controller,
             self.rrgs_controller,
             self.termodats_controller,
             self.air_valve_controller,
@@ -183,6 +191,11 @@ class AppSystem(BaseSystem):
         self.change_gas_valve_opened = ChangeGasValveStateAction(system=self)
         self.change_air_valve_opened = ChangeAirValveStateAction(system=self)
         self.change_pump_valve_opened = ChangePumpValveStateAction(system=self)
+
+        # ===== Vakumetr gases ==== #
+        self.current_gas_balloon_pressure_effect = SingleAnswerSystemEffect(system=self)
+        self.gases_pressure_controller.get_current_pressure_action.connect(
+            self.current_gas_balloon_pressure_effect)
 
         # ===== Termodats == #
         self.turn_on_all_termodats_action = TurnOnAllTermodatsRegulationAction(system=self)
