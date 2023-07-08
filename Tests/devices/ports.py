@@ -8,3 +8,4 @@ def get_serial_port():
     serial_port = "/dev/" + s + line[index]
     print("# SERIAL PORT:", serial_port)
     return serial_port
+# sudo dmesg | grep ttyUSB | grep usb

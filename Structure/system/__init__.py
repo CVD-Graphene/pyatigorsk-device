@@ -25,7 +25,7 @@ from coregraphene.components.controllers import (
 from coregraphene.system import BaseSystem
 from coregraphene.conf import settings
 from coregraphene.system_effects import SingleAnswerSystemEffect
-from coregraphene.utils import get_available_usb_ports
+from coregraphene.utils import get_available_ttyusb_ports, get_available_ttyusb_port_by_usb
 
 VALVES_CONFIGURATION = settings.VALVES_CONFIGURATION
 PUMPS_CONFIGURATION = settings.PUMPS_CONFIGURATION
@@ -41,6 +41,12 @@ class AppSystem(BaseSystem):
             'port_communicator': settings.ACCURATE_VAKUMETR_COMMUNICATOR_PORT,
             # 'baudrate': settings.ACCURATE_VAKUMETR_BAUDRATE,
         },
+    }
+
+    _usb_devices_ports = {
+        'vakumetr': settings.ACCURATE_VAKUMETR_USB_PORT,
+        'rrg': settings.RRG_USB_PORT,
+        'termodat': settings.TERMODAT_USB_PORT,
     }
 
     def _determine_attributes(self):
@@ -63,27 +69,36 @@ class AppSystem(BaseSystem):
         #     ['termodat_port', TermodatModbusController],
         #     ['vakumetr_port', AccurateVakumetrController],
         # ]
-        usb_ports = get_available_usb_ports()
-        if LOCAL_MODE:
-            usb_ports = ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']
-        print("PORTS USB:", usb_ports)
-        for controller_code, controller_class in self._controllers_check_classes.items():
-            for port in usb_ports:  # ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']:
-                if port in used_ports:
-                    continue
-                controller: AbstractController = controller_class(
-                    port=port,
-                    **self._default_controllers_kwargs.get(controller_code, {})
+        for controller_code, port_name_attr in self._ports_attr_names.items():
+            if LOCAL_MODE:
+                ttyusb_port = '/dev/ttyUSB0'
+            else:
+                ttyusb_port = get_available_ttyusb_port_by_usb(
+                    self._usb_devices_ports.get(controller_code, '')
                 )
-                controller.setup()
-                is_good = controller.check_command()
-                if is_good:
-                    setattr(self, self._ports_attr_names[controller_code], port)
-                    used_ports.append(port)
-                    break
+            setattr(self, self._ports_attr_names[controller_code], ttyusb_port)
 
-                controller.destructor()
-                del controller
+        # usb_ports = get_available_ttyusb_ports()
+        # if LOCAL_MODE:
+        #     usb_ports = ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']
+        # print("PORTS USB:", usb_ports)
+        # for controller_code, controller_class in self._controllers_check_classes.items():
+        #     for port in usb_ports:  # ['/dev/ttyUSB0', '/dev/ttyUSB1', '/dev/ttyUSB2']:
+        #         if port in used_ports:
+        #             continue
+        #         controller: AbstractController = controller_class(
+        #             port=port,
+        #             **self._default_controllers_kwargs.get(controller_code, {})
+        #         )
+        #         controller.setup()
+        #         is_good = controller.check_command()
+        #         if is_good:
+        #             setattr(self, self._ports_attr_names[controller_code], port)
+        #             used_ports.append(port)
+        #             break
+        #
+        #         controller.destructor()
+        #         del controller
 
         print(
             "|> FOUND PORTS:",
@@ -105,7 +120,7 @@ class AppSystem(BaseSystem):
 
     def _init_controllers(self):
         self.accurate_vakumetr_controller = AccurateVakumetrController(
-            get_potential_port=self.get_potential_controller_port,
+            get_potential_port=self.get_potential_controller_port_1,
             # port_communicator=settings.ACCURATE_VAKUMETR_COMMUNICATOR_PORT,
             **self._default_controllers_kwargs.get('vakumetr'),
             port=self.vakumetr_port,
@@ -127,13 +142,13 @@ class AppSystem(BaseSystem):
 
         self.rrgs_controller = SeveralRrgModbusController(
             config=VALVES_CONFIGURATION,
-            get_potential_port=self.get_potential_controller_port,
+            get_potential_port=self.get_potential_controller_port_1,
             port=self.rrg_port,
         )
 
         self.termodats_controller = SeveralTermodatModbusController(
             config=TERMODAT_CONFIGURATION,
-            get_potential_port=self.get_potential_controller_port,
+            get_potential_port=self.get_potential_controller_port_1,
             port=self.termodat_port,
         )
 
