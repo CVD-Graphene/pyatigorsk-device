@@ -1,7 +1,8 @@
 MAX_RECIPE_STEP_SECONDS = 60 * 60 * 24 * 2  # set to None for remove limit for step time
 
 ACCURATE_VAKUMETR_COMMUNICATOR_PORT = 1
-ACCURATE_VAKUMETR_USB_PORT = '1-1.4.4'  # FOR CVD-GRAPHENE USE USB1 (?)
+ACCURATE_VAKUMETR_USB_PORT = '1-1.4.4'  # порт по usb (хаб или отдельно -- неважно),
+# команда для определения: sudo dmesg | grep ttyUSB | grep usb
 CURRENT_SOURCE_PORT = 3
 
 RRG_USB_PORT = '1-1.4.2'
