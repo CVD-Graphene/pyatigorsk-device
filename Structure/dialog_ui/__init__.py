@@ -81,9 +81,9 @@ class AppMainDialogWindow(BaseMainDialogWindow):
         self.system.turn_off_all_termodats_action.connect(
             self.milw.temperature_block.draw_is_active_termodats_regulation
         )
-        self.system.set_temperature_and_speed_all_termodats_action.connect(
-            self.milw.temperature_block.draw_temperature_and_speed_termodats
-        )
+        # self.system.set_temperature_and_speed_all_termodats_action.connect(
+        #     self.milw.temperature_block.draw_temperature_and_speed_termodats
+        # )
         self.system.set_temperature_all_termodats_action.connect(
             self.milw.temperature_block.draw_temperature_termodats
         )

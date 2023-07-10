@@ -104,6 +104,18 @@ class SetTemperatureAndSpeedAllTermodatsTableAction(AppAction):
         self.system.set_temperature_and_speed_all_termodats_action(temperature, speed)
 
 
+class SetTemperatureAllTermodatsTableAction(AppAction):
+    """
+    Установить температуру на все печки (термодаты)
+    """
+    name = TABLE_ACTIONS_NAMES.SET_T_ALL_TERMODATS
+    key = ACTIONS_NAMES.SET_T_ALL_TERMODATS
+    args_info = [PositiveFloatKeyArgument]
+
+    def do_action(self, temperature):
+        self.system.set_temperature_all_termodats_action(temperature)
+
+
 class FullOpenSingleRrgAction(AppAction):
     """
     Полностью открыть ррг
@@ -317,8 +329,10 @@ class VentilateCameraTableAction(AppAction):
         close_all.action()
 
         # 2 STEP
-        set_termodat_values = self.sub_action(SetTemperatureAndSpeedAllTermodatsTableAction)
-        set_termodat_values.action(20, settings.TERMODAT_DEFAULT_SPEED)
+        # set_termodat_values = self.sub_action(SetTemperatureAndSpeedAllTermodatsTableAction)
+        # set_termodat_values.action(20, settings.TERMODAT_DEFAULT_SPEED)
+        set_termodat_values = self.sub_action(SetTemperatureAllTermodatsTableAction)
+        set_termodat_values.action(20)
 
         # 3 STEP
         termodat_turn_off = self.sub_action(TurnOffAllTermodatsTableAction)
@@ -404,8 +418,10 @@ class QuickShutdownAllDeviceElementsAction(AppAction):
 
     def do_action(self):
         # 1 STEP: уставка печки на 20 градусов
-        set_termodat_values = self.sub_action(SetTemperatureAndSpeedAllTermodatsTableAction)
-        set_termodat_values.action(20, settings.TERMODAT_DEFAULT_SPEED)
+        # set_termodat_values = self.sub_action(SetTemperatureAndSpeedAllTermodatsTableAction)
+        # set_termodat_values.action(20, settings.TERMODAT_DEFAULT_SPEED)
+        set_termodat_values = self.sub_action(SetTemperatureAllTermodatsTableAction)
+        set_termodat_values.action(20)
 
         # 2 STEP: выключить печку
         turn_off_termodats = self.sub_action(TurnOffAllTermodatsTableAction)
@@ -434,7 +450,8 @@ ACTIONS = [
 
     TurnOnAllTermodatsTableAction(),
     TurnOffAllTermodatsTableAction(),
-    SetTemperatureAndSpeedAllTermodatsTableAction(),
+    # SetTemperatureAndSpeedAllTermodatsTableAction(),
+    SetTemperatureAllTermodatsTableAction(),
     WaitForTemperatureAllTermodatsAction(),
 
     PauseAction(),

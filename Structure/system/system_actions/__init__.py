@@ -58,7 +58,7 @@ class TurnOffAllTermodatsRegulationAction(SystemEffect):
 class SetTemperatureAndSpeedAllTermodatsAction(SystemEffect):
     def _call_function(self, temperature, speed):
         return self._system.termodats_controller.set_temperature_and_speed_all_termodats(
-            temperature, speed
+            temperature  # , speed
         )
 
 

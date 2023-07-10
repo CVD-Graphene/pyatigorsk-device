@@ -17,6 +17,7 @@ class ACTIONS_NAMES:
     TURN_ON_ALL_TERMODATS = "TURN_ON_ALL_TERMODATS"
     TURN_OFF_ALL_TERMODATS = "TURN_OFF_ALL_TERMODATS"
     SET_T_V_ALL_TERMODATS = "SET_T_V_ALL_TERMODATS"
+    SET_T_ALL_TERMODATS = "SET_V_ALL_TERMODATS"
     WAIT_TARGET_TEMPERATURE = "WAIT_TARGET_TEMPERATURE"
 
     SET_TEMPERATURE = "SET_TEMPERATURE"
@@ -52,6 +53,7 @@ class TABLE_ACTIONS_NAMES:
     TURN_ON_ALL_TERMODATS = "Включить все печки"
     TURN_OFF_ALL_TERMODATS = "Выключить все печки"
     SET_T_V_ALL_TERMODATS = "Установить T и V на печки" + " [температура, скорость]"
+    SET_T_ALL_TERMODATS = "Установить T на печки" + " [температура]"
     WAIT_TARGET_TEMPERATURE = "Ждать установления температуры [температура, мммм:сс]"
 
     SET_TEMPERATURE = "Установить температуру"
