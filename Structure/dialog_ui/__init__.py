@@ -94,6 +94,12 @@ class AppMainDialogWindow(BaseMainDialogWindow):
             self.system.set_termodat_is_active
         ######################
 
+        # ALL CONTROLLERS STATUS WORKING ######
+        self.system.controllers_works_correctly_effect.connect(
+            self.right_buttons_layout_widget.system_status_widget.update_working_status_signal.emit
+        )
+        #######################################
+
     def _update_ui_values(self):
         # self.milw.temperature_block.show_pressure_block.set_value(
         #     self.system.accurate_vakumetr_value
