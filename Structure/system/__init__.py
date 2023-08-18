@@ -292,7 +292,7 @@ class AppSystem(BaseSystem):
         return max(list(self.current_temperatures.values()))
 
     @BaseSystem.action
-    def get_mim_current_termodat_temperature(self):
+    def get_min_current_termodat_temperature(self):
         return min(list(self.current_temperatures.values()))
 
     def get_current_vakumetr_pressure(self):
