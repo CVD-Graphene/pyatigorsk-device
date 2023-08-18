@@ -14,6 +14,7 @@ os.environ["QT_IM_MODULE"] = "qtvirtualkeyboard"
 
 tracemalloc.start()
 
+
 def handleVisibleChanged():
     if not QtGui.QGuiApplication.inputMethod().isVisible():
         return
