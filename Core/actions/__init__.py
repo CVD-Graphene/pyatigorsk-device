@@ -40,9 +40,9 @@ class TermodatSpeedArgument(IntKeyArgument):
 #     args_info = [TermodatSpeedArgument, TermodatIndexArgument]
 
 
-def get_total_seconds_from_time_arg(time_arg):
-    mins, secs = list(map(int, time_arg.strip().split(':')))
-    return mins * 60 + secs
+# def get_total_seconds_from_time_arg(time_arg):
+#     mins, secs = list(map(int, time_arg.strip().split(':')))
+#     return mins * 60 + secs
 
 
 def get_gas_index_by_name(name):
@@ -230,9 +230,8 @@ class BigPumpOutToPressureAction(AppAction):
     key = ACTIONS_NAMES.PUMP_OUT_CAMERA
     args_info = [PositiveFloatKeyArgument, TimeEditArgument]
 
-    def do_action(self, target_pressure, max_time):
+    def do_action(self, target_pressure, max_seconds):
         target_pressure = float(target_pressure)
-        max_seconds = get_total_seconds_from_time_arg(max_time)
 
         index = settings.BIG_PUMP_INDEX
         self.system.change_pump_valve_opened(True, device_num=index)
